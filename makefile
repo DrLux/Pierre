@@ -8,7 +8,8 @@ INC := -I header
 BUILDDIR := build
 
 #Definisce la cartella dove verra messo l' eseguibile
-TARGET := bin/iaps
+TARGET := bin/lake
+
 
 #avvia il comando find da shell che cerca tutti i file .c nella cartella specificata da SRCDIR, -type f = (regular file)
 SOURCES := $(shell find $(SRCDIR) -type f -name *.c)
