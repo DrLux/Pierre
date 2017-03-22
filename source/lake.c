@@ -2,20 +2,78 @@
 
 //todo: astrarre lo stato con una struct
 
-#define Boolean int
-#define true 1
-#define false 0
-
-#define NUM_ACTIONS_LAKE  4
-#define NUM_VARIABLE_LAKE  4
-
 int transition_functions(List* list, void* state){
-	return 0;
+	if (state == NULL)
+		return 0;
+
+	Boolean* actual_state = (Boolean*)state;
+	Boolean temp_state[NUM_VARIABLE_LAKE];
+	int legal_moves = 0;
+
+	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
+    	if (actual_state[i] == actual_state[0]){
+    		switch (i) {
+			case 0:
+			   	move_man((void*)actual_state, (void*)&temp_state);
+			   	if (constraint_test((void*)temp_state)){		
+		   			push(list,(void*)&move_man);
+		   			legal_moves++;
+		   		}
+			   break; 
+			case 1:
+			   move_man_cabbage((void*)actual_state, (void*)&temp_state);
+			   if (constraint_test((void*)temp_state)){		
+		   			push(list,(void*)&move_man_cabbage);
+		   			legal_moves++;
+		   		}
+			   break; 
+		   case 2:
+			   move_man_sheep((void*)actual_state, (void*)&temp_state);
+			   if (constraint_test((void*)temp_state)){		
+		   			push(list,(void*)&move_man_sheep);
+		   			legal_moves++;
+		   		}
+			   break; 
+			case 3:
+			   move_man_wolf((void*)actual_state, (void*)&temp_state);
+			   if (constraint_test((void*)temp_state)){		
+		   			push(list,(void*)&move_man_wolf);
+		   			legal_moves++;
+		   		}
+			   break; 
+			default:
+			   printf("Print nella default di transiction_functions");
+			   break;
+			}
+		} 
+    }
+	return legal_moves;
 }
+
+
+//metodo costruttore
+Lake* new_lake() {
+    struct Lake* problem = (Lake*)calloc(1,sizeof(Lake));;
+
+    for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
+    	problem->initial_state[i] = false;
+
+    problem->transition_functions = &transition_functions;
+    problem->goal_test = &goal_test;
+    problem->constraint_test = &constraint_test;
+    problem->print_state = &print_state;
+    problem->print_solution = &print_solution;
+    problem->heuristic = &heuristic;
+    problem->step_cost = &step_cost;
+    return problem;
+}
+
 
 
 //torna true se rispetta i vincoli
 int constraint_test(void* state){
+	if (state == NULL)
+		return false;
 	Boolean* actual_state = (Boolean*)state;
 	Boolean ret = true;
 	if ((actual_state[0] != actual_state[1]) && (actual_state[1] == actual_state[2]))
@@ -26,6 +84,8 @@ int constraint_test(void* state){
 }
 
 int goal_test(void* state){
+	if (state == NULL)
+		return false;
 	Boolean* actual_state = (Boolean*)state;
 	Boolean ret = constraint_test(state); //se non rispetta i vincoli esco subito dai controlli
 		for (int i = 0; i < NUM_VARIABLE_LAKE && ret; i++)
@@ -89,74 +149,52 @@ int step_cost(void* state, int cost){
 	return cost+1;
 }
 
-typedef struct lake {
-	//actions[]; array di funzioni
-	int initial_state[NUM_VARIABLE_LAKE];
-	int (*transition_functions)(List* list, void* state);
-	int (*goal_test)(void* state);
-	int (*constraint_test)(void* state);
-	void (*print_state)(void* state);
-	void (*print_solution)(List* list);
-	int (*heuristic)(void* state);
-	int (*step_cost)(void* state, int cost);
-} lake;
 
 
-
-
-
-lake new_lake() {
-    struct lake problem;
-
-    for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
-    	problem.initial_state[i] = false;
-
-    problem.transition_functions = &transition_functions;
-    problem.goal_test = &goal_test;
-    problem.constraint_test = &constraint_test;
-    problem.print_state = &print_state;
-    problem.print_solution = &print_solution;
-    problem.heuristic = &heuristic;
-    problem.step_cost = &step_cost;
-    return problem;
+void move_man(void* old_state, void* new_state){
+	Boolean* old = (Boolean*)old_state;
+	Boolean* new = (Boolean*)new_state;
+	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
+    	new[i] = old[i];
+    }
+	new[0] = !new[0];
 }
 
-int main(){
-    struct lake problem = new_lake();
-    List* list = new_list();
-    int state1[NUM_VARIABLE_LAKE];
-    int state2[NUM_VARIABLE_LAKE];
-    int state3[NUM_VARIABLE_LAKE];
-    int state4[NUM_VARIABLE_LAKE];
-    int state5[NUM_VARIABLE_LAKE];
-
-    for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
-    	state1[i] = false;
-    	state2[i] = false;
-    	state3[i] = false;
-    	state4[i] = true;
-    	state5[i] = true;
+void move_man_cabbage(void* old_state, void* new_state){
+	Boolean* old = (Boolean*)old_state;
+	Boolean* new = (Boolean*)new_state;
+	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
+    	new[i] = old[i];
     }
+	new[1] = !new[1];
+}
 
-    state2[0] = true;
+void move_man_sheep(void* old_state, void* new_state){
+	Boolean* old = (Boolean*)old_state;
+	Boolean* new = (Boolean*)new_state;
+	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
+    	new[i] = old[i];
+    }
+	new[2] = !new[2];
+}
+
+void move_man_wolf(void* old_state, void* new_state){
+	Boolean* old = (Boolean*)old_state;
+	Boolean* new = (Boolean*)new_state;
+	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
+    	new[i] = old[i];
+    }
+	new[3] = !new[3];
+}
 
 
-    state3[0] = true;
-    state3[1] = true;
+int main(){
+    struct Lake* problem = new_lake();
+    List* list = new_list();
 
-    state4[3] = false;
-    
+    problem->transition_functions(list,problem->initial_state);
 
-    push(list,(void*)&state1);
-    push(list,(void*)&state2);
-    push(list,(void*)&state3);
-    push(list,(void*)&state4);
-    push(list,(void*)&state5);
-    
-   
-
-    problem.print_solution(list);
+    problem->print_solution(list);
 
     return 0;
 } 
-

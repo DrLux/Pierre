@@ -31,7 +31,8 @@ Nodo {
 
 	- Parent = Puntatore al nodo padre 
 
-	- Azione = azione che ha generato questo nodo
+	- Azione = puntatore a funzione della lista che ha generato il nodo.
+				presa dalla lista di possibili azioni dato uno stato
 
 	- Path_Cost = Costo del cammino da radice a nodo
 
