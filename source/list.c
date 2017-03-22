@@ -1,16 +1,14 @@
 #include "list.h"
 
 List* new_list(){
-	List* new_list = NULL;
-	new_list = (List*)malloc(sizeof(List));
+	List* new_list = (List*)calloc(1,sizeof(List));
 	new_list->sentinel = create_node(NULL);
 	new_list->size = 0;
 	return new_list;
 }
 
 List_Node* create_node(void* ptr){
-	List_Node* new_node = NULL;
-	new_node = (List_Node*)malloc(sizeof(List_Node));
+	List_Node* new_node = (List_Node*)calloc(1,sizeof(List_Node));
 	new_node->cargo = ptr;
 	new_node->next = NULL;
 	return new_node;
@@ -29,8 +27,7 @@ void push(List* list,void* ptr){
 //rimuove in testa
 void* pop_lifo(List* list){
 	void* ret_cargo = NULL;
-	
-	if (list != NULL){
+	if (!empty(list)){
 		List_Node* temp_node = list->sentinel->next;
 		if (temp_node != NULL){
 			list->sentinel->next = temp_node->next; 
@@ -38,7 +35,8 @@ void* pop_lifo(List* list){
 			free(temp_node);
 		    list->size -=1;
 		}
-	}  		
+	}
+	  		
 	return ret_cargo;
 }
 
@@ -46,7 +44,7 @@ void* pop_lifo(List* list){
 void* pop_fifo(List* list){
 	void* ret_cargo = NULL;
 	
-	if (list != NULL){
+	if (!empty(list)){
 		List_Node* current = list->sentinel;
 		if (current->next != NULL){
 			while (current->next->next != NULL)
@@ -72,7 +70,7 @@ int size(List* list){
 	if (list != NULL)
 		return list->size;
 	else
-		return list == NULL;
+		return -1;
 }
 
 void clean_list(List* list){
@@ -86,23 +84,3 @@ void clean_list(List* list){
 		}
 	}
 }
-
-
-
-//Sistemare la calloc
-//Finire i test
-int main() {
-    //List* list = NULL;
-    //list = new_list();
-
-    printf("Test lista NULL\n");
-    push(NULL, NULL);
-    pop_lifo(NULL);
-    pop_fifo(NULL);
-    empty(NULL);
-    size(NULL);
-    clean_list(NULL);
-
-    return 0;
-}
-

@@ -2,9 +2,11 @@ Problema
 
 struct lake {
 
-	- Funzioni Di Tansizione = Prende come parametro un puntatore ad un vettore ed uno stato, riempie il vettore con le azioni legali (che superano i test sui vincoli) e resituisce il numero di azioni possibili da quello stato
+	- Num di azioni possibili
 
-	- Azion1..2..3... = azione che, a partire da un determinato stato, ne genera uno successore
+	- Funzioni Di Tansizione = Prende come parametro un puntatore ad una lista ed uno stato, e la riempie con le azioni legali a partire da quello stato (che superano i test sui vincoli) e resituisce il numero di azioni possibili da quello stato
+
+	- Azion1..2..3... = array di azioni che, a partire da un determinato stato, ne genera uno successore
 
 	- Stato Iniziale = Stato iniziale del problema
 
