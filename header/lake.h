@@ -4,6 +4,10 @@
 	#include <list.h>
 #endif
 
+#ifndef __COMMON__
+	#include <common.h>
+#endif
+
 #define Boolean int
 #define true 1
 #define false 0
@@ -11,37 +15,28 @@
 #define NUM_ACTIONS_LAKE  4
 #define NUM_VARIABLE_LAKE  4
 
-void transition_functions(List* list, void* state);//riempie la lista con le mosse ammissibili(ogni mossa una struct) 
-Boolean constraint_test(void* state);//torna true se rispetta i vincoli
-Boolean goal_test(void* state);//torna true se rispetta i vincoli ed è uno stato obiettivo
-void print_state(void* state);
-void print_solution(List* list);
-int heuristic(void* state);
-int step_cost(void* state, int cost);
+typedef struct Lake_state {
+	Boolean state[NUM_VARIABLE_LAKE];
+} Lake_state;
 
-//azioni possibili
-void move_man(void* old_state, void* new_state);
-void move_man_cabbage(void* old_state, void* new_state);
-void move_man_sheep(void* old_state, void* new_state);
-void move_man_wolf(void* old_state, void* new_state);
 
-// 0 = Uomo, 1 = Cavolo, 2 = Pecola, 3 = Lupo
-typedef struct Lake {
-	int initial_state[NUM_VARIABLE_LAKE];
-	void (*transition_functions)(List* list, void* state);
-	int (*goal_test)(void* state);
-	int (*constraint_test)(void* state);
-	void (*print_state)(void* state);
-	void (*print_solution)(List* list);
-	int (*heuristic)(void* state);
-	int (*step_cost)(void* state, int cost);
-} Lake;
-
-//struct universale per tutte le mosse del prolema.
-typedef struct lake_move {
-	void (*move)(void* old_state, void* new_state);
-} lake_move;
-
-Lake* new_lake();
+State* new_lake_state();
+//serve per astrarre dallo stato. solo il problema sa come riempire questa struct
+State* new_lake_initial_state();
 //unico costruttore che modifica la mossa nella struct che genera, in base all' indice passato come parametro
-lake_move* new_lake_move(int move_index);
+Action* new_lake_move(int move_index);
+
+State* lake_move_man(State* old_state);
+State* lake_move_man_cabbage(State* old_state);
+State* lake_move_man_sheep(State* old_state);
+State* lake_move_man_wolf(State* old_state);
+
+List* lake_transition_functions(State* struct_state);//riempie la lista con le mosse ammissibili(ogni mossa una struct) 
+Boolean lake_constraint_test(State* struct_state);//torna true se rispetta i vincoli
+Boolean lake_goal_test(State* struct_state);//torna true se rispetta i vincoli ed è uno stato obiettivo
+void lake_print_state(State* struct_state);
+void lake_print_solution(List* list); //potenzialmente inutile..vedremo
+int lake_heuristic(State* struct_state);
+int lake_step_cost(State* struct_state, int cost);
+Lake_state* extract_lake_state (State* generic_state);
+
