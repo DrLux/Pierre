@@ -12,10 +12,12 @@ typedef struct l_node{
 
 //Struttura che rappresenta la lista (Tipologia con sentinella)
 typedef struct {
-	short int size;
+	int size;
 	List_Node* sentinel;
 } List;
 
+//torna 0 se i due elementi (probabilmete stati) sono uguali, 1 se il primo è maggiore, -1 altrimenti
+typedef int (*EqualsFunction)(void*, void*);
 
 List* new_list();
 List_Node* create_node(void* ptr);
@@ -29,3 +31,6 @@ void* pop_fifo(List* list);
 int empty(List* list);
 int size(List* list);
 void clean_list(List* list);
+
+//torna true se sono uguali 
+int is_present(List* list, void* ptr, EqualsFunction equals);

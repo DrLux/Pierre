@@ -1,8 +1,19 @@
 #include <algorithms.h>
 
+//fare una struct che contiene le informazioni di debug quali:
+//nodi in frontiera, stati creati, nodi creati, nodi esplorati
+
+//funzione di hashing
+int hashing(void* valKey, int arraySize){
+  int* intKey = (int*) valKey;
+  return *intKey % arraySize;
+}
+
+
+
 //se il return è NULL allora ha fallito
 struct IA_Node* breadth_search(struct Problem* problem){
-	struct IA_Node* node = new_ia_node();	
+	struct IA_Node* node = new_ia_node();
 	node->node_state = problem->initial_state;
 	node->path_cost = 0;
 	if (problem->goal_test(node->node_state))
@@ -12,18 +23,23 @@ struct IA_Node* breadth_search(struct Problem* problem){
 	struct IA_Node* temp_node = NULL;
 
 	push(frontier,(void*)node);
-	//hashmap esplored;//da completare
+	HashTable_p esplored = hash_table_create(256);	
 	while (!empty(frontier)){
 		node = (IA_Node*)pop_fifo(frontier);
-		//add(esplorati, node->node_state);
+		//hash_table_insert(esplored, (void*)&node->node_state->id, sizeof(node->node_state->id), (void*)node->node_state, hashing, problem->state_compare);
 		actions = problem->transition_functions(node->node_state);
 		while(!empty(actions)){
 			temp_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
-			//if (figlio non in esplorati e non in frontiera){//implementare search and hashmap
-				if (problem->goal_test(temp_node->node_state))
-					return temp_node;
-				push(frontier,temp_node);
-			//}
+			if (!is_present(frontier, (void*)temp_node, node_equals)){
+				//if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
+					if (problem->goal_test(temp_node->node_state)){
+						printf("La frontiera conta %d nodi \n", frontier->size);
+						clean_list(frontier);
+						return temp_node;
+					}
+					push(frontier,temp_node);
+				//}
+			}
 		}
 
 	}
@@ -31,25 +47,22 @@ struct IA_Node* breadth_search(struct Problem* problem){
 }
 
 
-int main(){
-    struct Problem* problem = new_lake();
-    List* list = NULL;
-    struct Action* temp_move = NULL;
-    State* temp_state = NULL;
 
-
-    list = problem->transition_functions(problem->initial_state);
-    temp_move = (Action*)pop_fifo(list);
-
-
-    while (temp_move != NULL && temp_move->move != NULL){
-        temp_state = temp_move->move(problem->initial_state);
-        problem->print_state(temp_state);
-        temp_move = (Action*)pop_fifo(list);
-
-    }
-    return 0;
+void print_solution (struct IA_Node* node, struct Problem* problem){
+	if (node != NULL){
+		printf("Nodi generati: %ld\n", (new_ia_node())->id);
+		List* solution = new_list();
+		while (node != NULL){
+			push(solution,(void*)node->node_state);
+			node = node->parent;
+		}
+		problem->print_solution(solution);
+	} else
+		puts("La soluzione non è stata trovata");
 }
 
-//Fare la print solution che prende come parametro il nodo uscito dall' algoritmo. Se è null
-// stampa fallimento, altrimenti stampa la coda di soluzione
+int main(){
+    struct Problem* problem = new_lake();
+    print_solution(breadth_search(problem), problem);
+    return 0;
+}

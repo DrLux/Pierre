@@ -8,9 +8,6 @@
 	#include <common.h>
 #endif
 
-#define Boolean int
-#define true 1
-#define false 0
 
 #define NUM_ACTIONS_LAKE  4
 #define NUM_VARIABLE_LAKE  4
@@ -38,5 +35,6 @@ void lake_print_state(State* struct_state);
 void lake_print_solution(List* list); //potenzialmente inutile..vedremo
 int lake_heuristic(State* struct_state);
 int lake_step_cost(State* struct_state, int cost);
+int lake_state_compare(void* state1, void* state2);
 Lake_state* extract_lake_state (State* generic_state);
 

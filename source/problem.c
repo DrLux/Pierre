@@ -11,6 +11,7 @@ Problem* new_lake() {
     lake->print_solution = &lake_print_solution;
     lake->heuristic = &lake_heuristic;
     lake->step_cost = &lake_step_cost;
+    lake->state_compare = &lake_state_compare;
     return lake;
 }
 

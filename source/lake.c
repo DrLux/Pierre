@@ -1,5 +1,5 @@
 #include <lake.h>
-
+long int lake_states = 1;
 /*todo: trovare un modo più efficente per fare questo
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new[i] = old[i];
@@ -13,6 +13,7 @@ State* new_lake_state(){
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
 		lake_state->state[i] = -1;
 	new_state->state = (void*)lake_state;
+	new_state->id = lake_states++;
 	return new_state;
 }
 
@@ -23,6 +24,7 @@ State* new_lake_initial_state(){
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
 		lake_root_state->state[i] = false;
 	new_state->state = (void*)lake_root_state;
+	new_state->id = 0;
 	return new_state;
 }
 
@@ -118,14 +120,14 @@ int lake_step_cost(State* struct_state, int cost){
 
 void lake_print_solution(List* list){
 	int num_state = 0;
+	printf("Stati generati: %ld\n", lake_states);
 	printf("\n\t ** Soluzione ** \n");
-	void* actual_state = pop_fifo(list);
+	void* actual_state = pop_lifo(list);
 	while (actual_state != NULL){
 		printf("\n\t ** State N. %d ** \n", num_state++);
 		lake_print_state(actual_state);
-		actual_state = pop_fifo(list);
+		actual_state = pop_lifo(list);
 	}
-	
 }
 
 void lake_print_state(State* struct_state){
@@ -225,4 +227,18 @@ State* lake_move_man_wolf(State* old_state){
 Lake_state* extract_lake_state (State* generic_state){
 	Lake_state* struct_state = (Lake_state*)generic_state->state;
 	return struct_state;
+}
+
+//torna 0 se sono uguali, 1 altrimenti
+int lake_state_compare(void* state1, void* state2){
+	int ret = false;
+	if (state1 != NULL && state2 != NULL){
+		Lake_state* st1 = extract_lake_state((State*)state1);
+		Lake_state* st2 = extract_lake_state((State*)state2);
+		ret = true;
+		for (int i = 0; i < NUM_VARIABLE_LAKE && ret; i++){
+	    	ret = (st1->state[i] == st2->state[i]);
+	    }
+	}
+    return !ret;
 }

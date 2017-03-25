@@ -16,6 +16,7 @@ typedef struct Problem {
 	void (*print_solution)(List* list);//potenzialmente inutile
 	int (*heuristic)(State* state);
 	int (*step_cost)(State* state, int cost);
+	int (*state_compare)(void* state1, void* state2);
 } Problem;
 
 

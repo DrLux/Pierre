@@ -1,6 +1,11 @@
 #define __COMMON__
 
+#define Boolean int
+#define true 1
+#define false 0
+
 typedef struct State {
+	long int id;
 	void* state;
 } State;
 
