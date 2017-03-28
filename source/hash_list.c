@@ -36,7 +36,6 @@ void hash_node_destroy(HashNode_p node){
 
 // insert a node in the hash list
 void hash_list_insert(HashList_p list, HashNode_p node) {
-
   node->prev = NULL;
   node->next = list->first;
 

@@ -1,6 +1,6 @@
 #include <node.h>
 
-int id_nodes = 0;
+int id_nodes = 1;
 
 IA_Node* new_ia_node() {
     struct IA_Node* new_node = (IA_Node*)calloc(1,sizeof(IA_Node));;

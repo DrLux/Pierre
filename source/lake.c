@@ -1,5 +1,5 @@
 #include <lake.h>
-long int lake_states = 1;
+
 /*todo: trovare un modo più efficente per fare questo
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new[i] = old[i];
@@ -8,24 +8,22 @@ long int lake_states = 1;
 
 //creo l' array e lo inizializzo
 State* new_lake_state(){
-	struct State* new_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_state();
 	struct Lake_state* lake_state = (Lake_state*)calloc(1,sizeof(Lake_state));
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
 		lake_state->state[i] = -1;
-	new_state->state = (void*)lake_state;
-	new_state->id = lake_states++;
-	return new_state;
+	new_generic_state->state = (void*)lake_state;
+	return new_generic_state;
 }
 
 //dovrei fare una super ma non voglio inizializzare a 0 e poi rinizializzare a false
 State* new_lake_initial_state(){
-	struct State* new_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_state();
 	struct Lake_state* lake_root_state = (Lake_state*)calloc(1,sizeof(Lake_state));
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++)
 		lake_root_state->state[i] = false;
-	new_state->state = (void*)lake_root_state;
-	new_state->id = 0;
-	return new_state;
+	new_generic_state->state = (void*)lake_root_state;
+	return new_generic_state;
 }
 
 
@@ -58,7 +56,7 @@ List* lake_transition_functions(State* generic_state){
 	List* list = NULL;
 	if (generic_state != NULL && generic_state->state != NULL){
 		list = new_list();
-		State* temp_state = new_lake_state();
+		State* temp_state = NULL;
 
 		for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
 	    	if (extract_lake_state(generic_state)->state[i] == extract_lake_state(generic_state)->state[0]){ //solo gli attori sulla stessa sponda del' uomo possono attraversare il fiume con lui
@@ -120,7 +118,7 @@ int lake_step_cost(State* struct_state, int cost){
 
 void lake_print_solution(List* list){
 	int num_state = 0;
-	printf("Stati generati: %ld\n", lake_states);
+	printf("Stati generati: %ld\n", get_num_states()); 
 	printf("\n\t ** Soluzione ** \n");
 	void* actual_state = pop_lifo(list);
 	while (actual_state != NULL){
@@ -170,8 +168,8 @@ void lake_print_state(State* struct_state){
 
 //prende uno lake_state come parametro ma torna uno State normale
 State* lake_move_man(State* old_state){
-	Lake_state* new = extract_lake_state(new_lake_state());
-	struct State* new_generic_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_lake_state();
+	Lake_state* new = extract_lake_state(new_generic_state);
 
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new->state[i] = extract_lake_state(old_state)->state[i];
@@ -183,8 +181,8 @@ State* lake_move_man(State* old_state){
 }
 
 State* lake_move_man_cabbage(State* old_state){
-	Lake_state* new = extract_lake_state(new_lake_state());
-	struct State* new_generic_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_lake_state();
+	Lake_state* new = extract_lake_state(new_generic_state);
 
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new->state[i] = extract_lake_state(old_state)->state[i];
@@ -196,8 +194,8 @@ State* lake_move_man_cabbage(State* old_state){
 }
 
 State* lake_move_man_sheep(State* old_state){
-	Lake_state* new = extract_lake_state(new_lake_state());
-	struct State* new_generic_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_lake_state();
+	Lake_state* new = extract_lake_state(new_generic_state);
 
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new->state[i] = extract_lake_state(old_state)->state[i];
@@ -210,8 +208,8 @@ State* lake_move_man_sheep(State* old_state){
 }
 
 State* lake_move_man_wolf(State* old_state){
-	Lake_state* new = extract_lake_state(new_lake_state());
-	struct State* new_generic_state = (State*)calloc(1,sizeof(State));
+	struct State* new_generic_state = new_lake_state();
+	Lake_state* new = extract_lake_state(new_generic_state);
 
 	for (int i = 0; i < NUM_VARIABLE_LAKE; i++){
     	new->state[i] = extract_lake_state(old_state)->state[i];
@@ -231,12 +229,14 @@ Lake_state* extract_lake_state (State* generic_state){
 
 //torna 0 se sono uguali, 1 altrimenti
 int lake_state_compare(void* state1, void* state2){
+
 	int ret = false;
 	if (state1 != NULL && state2 != NULL){
 		Lake_state* st1 = extract_lake_state((State*)state1);
 		Lake_state* st2 = extract_lake_state((State*)state2);
 		ret = true;
 		for (int i = 0; i < NUM_VARIABLE_LAKE && ret; i++){
+			if (st1 == NULL)
 	    	ret = (st1->state[i] == st2->state[i]);
 	    }
 	}

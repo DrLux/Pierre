@@ -65,7 +65,6 @@ HASH TABLE INSERT
 void* hash_table_insert(HashTable_p hash_table, void* key, size_t key_size, void* record, HashFunction hashing, CompFunction compare){
 
   void* replacedRecord = NULL;
-
   unsigned int hash = hashing(key, hash_table->size);
 
   //search if the key is already present in this case we replace the record

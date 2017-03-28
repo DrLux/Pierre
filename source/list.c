@@ -60,8 +60,9 @@ void* pop_fifo(List* list){
 
 //restituisce TRUE se la lista è vuota
 int empty(List* list){
-	if (list != NULL)
+	if (list != NULL){
 		return list->sentinel->next == NULL;
+	}
 	else
 		return list == NULL;
 }

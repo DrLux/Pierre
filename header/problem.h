@@ -19,8 +19,5 @@ typedef struct Problem {
 	int (*state_compare)(void* state1, void* state2);
 } Problem;
 
-
-
 //genera la struct che contiene tutte le informazioni del problema
 Problem* new_lake();
-

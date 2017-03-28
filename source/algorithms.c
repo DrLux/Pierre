@@ -4,12 +4,11 @@
 //nodi in frontiera, stati creati, nodi creati, nodi esplorati
 
 //funzione di hashing
+//con le HASH si parla di ID_STATO. Con le liste di id_nodo
 int hashing(void* valKey, int arraySize){
-  int* intKey = (int*) valKey;
+  long int* intKey = (long int*) valKey;
   return *intKey % arraySize;
 }
-
-
 
 //se il return è NULL allora ha fallito
 struct IA_Node* breadth_search(struct Problem* problem){
@@ -26,20 +25,23 @@ struct IA_Node* breadth_search(struct Problem* problem){
 	HashTable_p esplored = hash_table_create(256);	
 	while (!empty(frontier)){
 		node = (IA_Node*)pop_fifo(frontier);
-		//hash_table_insert(esplored, (void*)&node->node_state->id, sizeof(node->node_state->id), (void*)node->node_state, hashing, problem->state_compare);
+		hash_table_insert(esplored, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
 		actions = problem->transition_functions(node->node_state);
 		while(!empty(actions)){
 			temp_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
 			if (!is_present(frontier, (void*)temp_node, node_equals)){
-				//if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
+				if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
 					if (problem->goal_test(temp_node->node_state)){
-						printf("La frontiera conta %d nodi \n", frontier->size);
+						puts("");
+						printf("Stati esplorati %d\n", esplored->recordInserted);
+						printf("Nodi rimasti in frontiera %d nodi \n", frontier->size);
 						clean_list(frontier);
+						hash_table_destroy(esplored);
 						return temp_node;
 					}
 					push(frontier,temp_node);
-				//}
-			}
+				} 
+			} 
 		}
 
 	}
@@ -50,7 +52,7 @@ struct IA_Node* breadth_search(struct Problem* problem){
 
 void print_solution (struct IA_Node* node, struct Problem* problem){
 	if (node != NULL){
-		printf("Nodi generati: %ld\n", (new_ia_node())->id);
+		printf("Nodi generati: %ld\n", (new_ia_node())->id); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
 		List* solution = new_list();
 		while (node != NULL){
 			push(solution,(void*)node->node_state);

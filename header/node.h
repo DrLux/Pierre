@@ -6,7 +6,7 @@
 
 
 typedef struct IA_Node {
-	long int id;
+	long int id; //serve per la LISTA di nodi
 	struct State* node_state;
 	struct IA_Node* parent;
 	struct Action* node_action;
