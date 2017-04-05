@@ -79,7 +79,16 @@ struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, in
 	}
 }
 
-
+struct IA_Node* iterative_deepening_search(struct Problem* problem){
+	long long unsigned int i = 0; //per raggiungere il livello di profondità maggiore possibile
+	struct IA_Node* result = depth_limited_search(problem,i);
+	
+	for (; CUTOFF(result); i++){ //se la ricerca si interrompe per limiti di profondità, ne lanciamo una con profondità maggiore
+		result = depth_limited_search(problem,i);
+	}
+	printf("Il risultato è stato trovato ad una profondita paria a: %lld\n",i);
+	return result;
+}
 
 
 

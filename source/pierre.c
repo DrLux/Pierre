@@ -8,13 +8,20 @@ int main(){
     else	
     	puts("La breadth_search sul lake non è andata a buon fine.");*/
 
-    struct IA_Node* node_solution = depth_limited_search(problem,LAKE_DLS_LIMIT); //definire LIMITE_LAKE
+    /*struct IA_Node* node_solution = depth_limited_search(problem,LAKE_DLS_LIMIT); //definire LIMITE_LAKE
     if (FAILURE(node_solution))
     	puts("La ricerca non ha prodotto risultati.");
     if (CUTOFF(node_solution))
     	puts("Il limite inserito è troppo stringente.");
     else
-    	print_solution(node_solution,problem);
+    	print_solution(node_solution,problem);*/
+
+    
+    struct IA_Node* node_solution = iterative_deepening_search(problem); 
+    if (FAILURE(node_solution))
+    	puts("La ricerca non ha prodotto risultati.");
+	else 
+		print_solution(node_solution,problem);
     return 0;
 }
 
