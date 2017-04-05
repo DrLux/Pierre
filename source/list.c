@@ -98,37 +98,3 @@ int is_present(List* list, void* ptr, EqualsFunction equals){
 	}
 	return ret;
 }
-
-/*
-int state_equals(void* state1, void* state2){
-	int ret = 0;
-	if (state1 != NULL && state2 != NULL){
-		int st1 = *((int*)state1);
-		int st2 = *((int*)state2);
-		ret = (st1 == st2);
-	}
-    return ret;
-}
-
-
-int main(){
-    List* list = new_list();
-    int a = 1;
-    int b = 2;
-    int c = 3;
-    int d = 5;
-
-    push(list, (void*)&a);
-    push(list, (void*)&b);
-    push(list, (void*)&c);
-
-    if (is_present(list,(void*)&b, state_equals) && is_present(list,(void*)&c, state_equals))
-    	puts("Dovresti leggermi");
-
-    if (is_present(list,(void*)&d, state_equals))
-    	puts("Non dovresti leggermi");
-    
-    clean_list(list);
-    return 0;
-}
-*/
