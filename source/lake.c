@@ -121,8 +121,8 @@ void lake_print_solution(List* list){
 	printf("\n\t ** Soluzione ** \n");
 	void* actual_state = pop_lifo(list);
 	while (actual_state != NULL){
-		printf("\n\t ** State N. %d ** \n", num_state++);
-		lake_print_state(actual_state);
+		//printf("\n\t ** State N. %d ** \n", num_state++);
+		//lake_print_state(actual_state);
 		actual_state = pop_lifo(list);
 	}
 }

@@ -69,3 +69,11 @@ int pr_ispresent(pr_heap* h, void* data, PREqualsFunction equals){
     }
     return find;
 }
+
+pr_heap* new_pr_list(){
+    pr_heap* new_pr_list = (pr_heap*)calloc(1,sizeof(pr_heap));
+    new_pr_list->nodes = NULL;
+    new_pr_list->len = 0; 
+    new_pr_list->size = 0;
+    return new_pr_list;
+}

@@ -1,7 +1,6 @@
 #define __LIST__
 
 #include <stdlib.h>
-#include <assert.h>
 #include <stdio.h>
 
 //Struttura che rappresenta il nodo di una lista

@@ -22,7 +22,7 @@ struct IA_Node* breadth_search(struct Problem* problem){
 	struct IA_Node* temp_node = NULL;
 
 	push(frontier,(void*)node);
-	HashTable_p esplored = hash_table_create(256);	
+	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
 	while (!empty(frontier)){
 		node = (IA_Node*)pop_fifo(frontier);
 		hash_table_insert(esplored, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
@@ -86,10 +86,35 @@ struct IA_Node* iterative_deepening_search(struct Problem* problem){
 	for (; CUTOFF(result); i++){ //se la ricerca si interrompe per limiti di profondità, ne lanciamo una con profondità maggiore
 		result = depth_limited_search(problem,i);
 	}
-	printf("Il risultato è stato trovato ad una profondita paria a: %lld\n",i);
+	printf("Il risultato è stato trovato ad una profondita paria a: %lld\n",i-1);
 	return result;
 }
 
+//non ben testata
+struct IA_Node* uniform_cost_search(struct Problem* problem){
+	struct IA_Node* node = new_ia_node();
+	List* actions = NULL;
+	struct IA_Node* child_node = NULL;
+	node->node_state = problem->initial_state;
+	pr_heap* frontier = new_pr_list();
+	pr_push(frontier,node->path_cost,(void*)node);
+	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
+	
+	while (1){//mettere while !pr_empty 
+		if (pr_empty(frontier))  
+			return NULL; 
+		node = (struct IA_Node*)pr_pop(frontier); /* chooses the lowest-cost node in frontier */ 
+		if (problem->goal_test(node->node_state))
+			return node;
+		hash_table_insert(esplored, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
+		actions = problem->transition_functions(node->node_state); 
+		while(!empty(actions)){
+			child_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));	
+  			if (hash_table_search(esplored, (void*)&child_node->node_state->id, hashing, problem->state_compare) == NULL || !pr_ispresent(frontier,(void*)child_node, node_equals) )
+				pr_push(frontier,child_node->path_cost,(void*)child_node);
+		}
+	}
+}
 
 
 void manage_goal(List* frontier, HashTable_p esplored){
