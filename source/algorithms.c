@@ -32,11 +32,7 @@ struct IA_Node* breadth_search(struct Problem* problem){
 			if (!is_present(frontier, (void*)temp_node, node_equals)){
 				if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
 					if (problem->goal_test(temp_node->node_state)){
-						puts("");
-						printf("Stati esplorati %d\n", esplored->recordInserted);
-						printf("Nodi rimasti in frontiera %d nodi \n", frontier->size);
-						clean_list(frontier);
-						hash_table_destroy(esplored);
+						manage_goal(frontier,esplored);
 						return temp_node;
 					}
 					push(frontier,temp_node);
@@ -49,22 +45,48 @@ struct IA_Node* breadth_search(struct Problem* problem){
 }
 
 
+struct IA_Node* depth_limited_search(struct Problem* problem, int limit){
+	struct IA_Node* root = new_ia_node();
+	root->node_state = problem->initial_state;
+	return dls_recursive(root,problem,limit);
+}
 
-void print_solution (struct IA_Node* node, struct Problem* problem){
-	if (node != NULL){
-		printf("Nodi generati: %ld\n", (new_ia_node())->id); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
-		List* solution = new_list();
-		while (node != NULL){
-			push(solution,(void*)node->node_state);
-			node = node->parent;
+struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit){
+	if (problem->goal_test(node->node_state)){
+		return node;
+	} else {
+		if (limit == 0){
+			return (struct IA_Node*)1;
+		} else {
+			Boolean cutoff_occured = false;
+			struct IA_Node* ret = NULL;
+			struct IA_Node* child = NULL;
+			List* actions = problem->transition_functions(node->node_state);
+			while(!empty(actions)){
+				child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
+				ret = dls_recursive(child,problem,limit-1);
+				if (CUTOFF(ret))
+					cutoff_occured = true; //è necessario?
+				else 
+					if (!FAILURE(ret)) 
+						return ret;
+			}
+			if (cutoff_occured)
+				return (struct IA_Node*)1;
+			else
+				return NULL;
 		}
-		problem->print_solution(solution);
-	} else
-		puts("La soluzione non è stata trovata");
+	}
 }
 
-int main(){
-    struct Problem* problem = new_lake();
-    print_solution(breadth_search(problem), problem);
-    return 0;
+
+
+
+
+void manage_goal(List* frontier, HashTable_p esplored){
+	printf("\nStati esplorati %d\n", esplored->recordInserted);
+	printf("Nodi rimasti in frontiera: %d\n", frontier->size);
+	clean_list(frontier);
+	hash_table_destroy(esplored);
 }
+

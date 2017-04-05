@@ -6,4 +6,11 @@
 
 #include "hash_table.h"
 
+#define FAILURE(x) ((void*)(x) == (void*)0)
+#define CUTOFF(x) ((void*)(x) == (void*)1)
+
 struct IA_Node* breadth_search(struct Problem* problem);
+void manage_goal(List* frontier, HashTable_p esplored);
+
+struct IA_Node* depth_limited_search(struct Problem* problem, int limit);
+struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit);

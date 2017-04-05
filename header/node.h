@@ -1,6 +1,6 @@
 #define __NODE__
 
-#ifndef __LAKE__
+#ifndef __PROBLEM__
 	#include <problem.h>
 #endif
 

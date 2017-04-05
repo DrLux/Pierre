@@ -5,7 +5,6 @@
     	new[i] = old[i];
 */
 
-
 //creo l' array e lo inizializzo
 State* new_lake_state(){
 	struct State* new_generic_state = new_state();

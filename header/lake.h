@@ -4,7 +4,7 @@
 	#include <common.h>
 #endif
 
-
+#define LAKE_DLS_LIMIT  7
 #define NUM_ACTIONS_LAKE  4
 #define NUM_VARIABLE_LAKE  4
 
