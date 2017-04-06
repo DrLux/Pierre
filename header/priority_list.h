@@ -21,5 +21,4 @@ int pr_empty(pr_heap* h);//restituisce TRUE se la lista è vuota
 void heapify (pr_heap* h);
 int pr_ispresent(pr_heap* h, void* data, PREqualsFunction equals);
 pr_heap* new_pr_list();
-int pr_isfirst(pr_heap* h, void* data, PREqualsFunction equals);
-void* pr_get_first(pr_heap* h);
+void pr_clean_list(pr_heap* h);

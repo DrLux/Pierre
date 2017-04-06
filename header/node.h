@@ -20,5 +20,7 @@ struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, s
 int node_equals(void* node1, void* node2);
 
 IA_Node* new_ia_node();
+void node_reset_count();
+long int get_num_nodes();
 
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include "hash_table.h"
 
-
+//Credit for HashTable: BigNerd95 -> https://github.com/BigNerd95/Algorithms_University
 
 /****************
 HASH TABLE CREATE

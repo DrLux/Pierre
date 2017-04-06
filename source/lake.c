@@ -115,18 +115,6 @@ int lake_step_cost(State* struct_state, int cost){
 	return cost+1; //problema di costo unitario
 }
 
-void lake_print_solution(List* list){
-	int num_state = 0;
-	printf("Stati generati: %ld\n", get_num_states()); 
-	printf("\n\t ** Soluzione ** \n");
-	void* actual_state = pop_lifo(list);
-	while (actual_state != NULL){
-		//printf("\n\t ** State N. %d ** \n", num_state++);
-		//lake_print_state(actual_state);
-		actual_state = pop_lifo(list);
-	}
-}
-
 void lake_print_state(State* struct_state){
 	if (struct_state != NULL && struct_state->state != NULL){
 	

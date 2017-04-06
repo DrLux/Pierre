@@ -24,3 +24,4 @@ State* new_state();
 long int get_num_states();
 
 void swap(void* pt1, void* pt2);
+void state_reset_count();

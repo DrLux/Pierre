@@ -1,6 +1,6 @@
 #include <node.h>
 
-int id_nodes = 1;
+long int id_nodes = 0;
 
 IA_Node* new_ia_node() {
     struct IA_Node* new_node = (IA_Node*)calloc(1,sizeof(IA_Node));;
@@ -15,7 +15,7 @@ IA_Node* new_ia_node() {
 }
 
 struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, struct Action* new_step){
-	struct IA_Node* child = new_ia_node(); 
+    struct IA_Node* child = new_ia_node(); 
 	child->node_state = new_step->move(actual->node_state);//da rendere void, il nuovo stato è null e non una struct vuota
 	child->parent = actual;
 	child->node_action = new_step;
@@ -30,4 +30,12 @@ int node_equals(void* node1, void* node2){
         ret = (((IA_Node*)node1)->id == ((IA_Node*)node2)->id);
     }
     return ret;
+}
+
+void node_reset_count(){
+    id_nodes = 0;
+}
+
+long int get_num_nodes(){
+    return id_nodes;
 }

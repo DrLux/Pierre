@@ -28,7 +28,6 @@ List* lake_transition_functions(State* struct_state);//riempie la lista con le m
 Boolean lake_constraint_test(State* struct_state);//torna true se rispetta i vincoli
 Boolean lake_goal_test(State* struct_state);//torna true se rispetta i vincoli ed è uno stato obiettivo
 void lake_print_state(State* struct_state);
-void lake_print_solution(List* list); //potenzialmente inutile..vedremo
 int lake_heuristic(State* struct_state);
 int lake_step_cost(State* struct_state, int cost);
 int lake_state_compare(void* state1, void* state2);

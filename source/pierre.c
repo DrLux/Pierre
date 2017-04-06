@@ -1,59 +1,81 @@
 #include <pierre.h>
 
 int main(){
-    /*struct Problem* problem1 = new_lake();
-    struct IA_Node* node_solution1 = breadth_search(problem1);
-    if (node_solution1 != NULL){
-        puts("breadth_search");
-		print_solution(node_solution1, problem1);
-    }
-    else	
-    	puts("La breadth_search sul lake non è andata a buon fine.");
-    
-    struct Problem* problem2 = new_lake();
-    struct IA_Node* node_solution2 = depth_limited_search(problem2,LAKE_DLS_LIMIT); //definire LIMITE_LAKE
-    if (FAILURE(node_solution2))
-    	puts("La ricerca non ha prodotto risultati.");
-    if (CUTOFF(node_solution2))
-    	puts("Il limite inserito è troppo stringente.");
-    else{
-        puts("depth_limited_search");
-    	print_solution(node_solution2,problem2);
-    }
-    
-    
-    struct Problem* problem3 = new_lake();
-    struct IA_Node* node_solution3 = iterative_deepening_search(problem3); 
-    if (FAILURE(node_solution3))
-    	puts("La ricerca non ha prodotto risultati.");
-	else {
-        puts("iterative_deepening_search");
-		print_solution(node_solution3,problem3);
-    }*/
-    
-    
-    struct Problem* problem4 = new_lake();
-    struct IA_Node* node_solution4 = uniform_cost_search(problem4);
-    if (node_solution4 != NULL){
-        puts("uniform_cost_search");
-        print_solution(node_solution4, problem4);
-    }
-    else    
-        puts("La RIceca a costo uniforme non è andata a buon fine.");
-    
+    struct Problem* problem = new_lake(); 
+    resolve_iterative_deepening_search(problem);
+    //resolve_depth_limited_search(problem);
+    //resolve_breadth_search(problem);
+    //resolve_uniform_cost_search(problem);  
+  
     return 0;
 }
 
 
 void print_solution (struct IA_Node* node, struct Problem* problem){
 	if (node != NULL){
-		printf("Nodi generati: %ld\n", (new_ia_node())->id); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
-		List* solution = new_list();
-		while (node != NULL){
-			push(solution,(void*)node->node_state);
-			node = node->parent;
-		}
-		problem->print_solution(solution);
+        int num_state = 0;
+        printf("Stati generati: %ld\n", get_num_states()); 
+        printf("Nodi generati: %ld\n", get_num_nodes()); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
+        printf("\n\t ** Soluzione ** \n");
+        
+        while (node != NULL){
+            printf("\n\t ** State N. %d ** \n", num_state++);
+            problem->print_state((void*)node->node_state);
+            node = node->parent;
+        }
 	} else
 		puts("La soluzione non è stata trovata");
+}
+
+
+void resolve_breadth_search(struct Problem* problem){
+    struct IA_Node* node_solution = breadth_search(problem);
+    if (node_solution != NULL){
+        puts("Problema risolto con Ricerca in Ampiezza");
+        print_solution(node_solution, problem);
+    } 
+    else 
+        puts("La Ricerca in Ampiezza non trovato risultati.");
+    
+    node_reset_count();
+    state_reset_count();    
+}
+
+void resolve_depth_limited_search(struct Problem* problem){
+    struct IA_Node* node_solution = depth_limited_search(problem,problem->depth_solution); 
+    if (FAILURE(node_solution))
+        puts("La ricerca in Profondità Limitata non ha prodotto risultati.");
+    if (CUTOFF(node_solution))
+        puts("Il limite inserito è troppo stringente.");
+    else{
+        puts("Problema risolto con Ricerca in Profondità Limitata");
+        print_solution(node_solution,problem);
+    }
+    node_reset_count();
+    state_reset_count();
+}
+
+void resolve_iterative_deepening_search(struct Problem* problem){
+    struct IA_Node* node_solution = iterative_deepening_search(problem); 
+    if (FAILURE(node_solution))
+        puts("La ricerca in Profondità Iterativa non ha prodotto risultati.");
+    else {
+        puts("Problema risolto con Ricerca in Profondità Iterativa");
+        printf("Il risultato è stato trovato ad una profondita paria a: %ld\n",problem->depth_solution);
+        print_solution(node_solution,problem);
+    }
+    node_reset_count();
+    state_reset_count();
+}
+
+void resolve_uniform_cost_search(struct Problem* problem){
+    struct IA_Node* node_solution = uniform_cost_search(problem);
+    if (node_solution != NULL){
+         puts("Problema risolto con la Riceca a Costo Uniforme");
+        print_solution(node_solution, problem);
+    }
+    else    
+        puts("La Riceca a Costo Uniforme non ha prodotto risultati.");
+    node_reset_count();
+    state_reset_count();
 }

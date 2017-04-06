@@ -3,6 +3,7 @@
 #include <string.h>
 #include "hash_table.h"
 
+//Credit for HashList: BigNerd95 -> https://github.com/BigNerd95/Algorithms_University 
 
 // create a new hash list
 HashList_p hash_list_create() {

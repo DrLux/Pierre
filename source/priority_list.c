@@ -70,6 +70,15 @@ int pr_ispresent(pr_heap* h, void* data, PREqualsFunction equals){
     return find;
 }
 
+void pr_clean_list(pr_heap* h){
+    if (h != NULL){
+        for(int i = h->len-1; i <= 0; i--)
+            free((void*)&(h->nodes[i]));
+        free((void*)h);
+    }
+
+}
+
 pr_heap* new_pr_list(){
     pr_heap* new_pr_list = (pr_heap*)calloc(1,sizeof(pr_heap));
     new_pr_list->nodes = NULL;
@@ -77,3 +86,4 @@ pr_heap* new_pr_list(){
     new_pr_list->size = 0;
     return new_pr_list;
 }
+

@@ -13,10 +13,10 @@ typedef struct Problem {
 	Boolean (*goal_test)(State* state);
 	Boolean (*constraint_test)(State* state);
 	void (*print_state)(State* state);
-	void (*print_solution)(List* list);//potenzialmente inutile
 	int (*heuristic)(State* state);
 	int (*step_cost)(State* state, int cost);
 	int (*state_compare)(void* state1, void* state2);
+	long int depth_solution;
 } Problem;
 
 //genera la struct che contiene tutte le informazioni del problema

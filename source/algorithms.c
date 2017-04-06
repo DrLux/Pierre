@@ -20,7 +20,6 @@ struct IA_Node* breadth_search(struct Problem* problem){
 	List* frontier = new_list();
 	List* actions = NULL;
 	struct IA_Node* temp_node = NULL;
-
 	push(frontier,(void*)node);
 	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
 	while (!empty(frontier)){
@@ -32,7 +31,8 @@ struct IA_Node* breadth_search(struct Problem* problem){
 			if (!is_present(frontier, (void*)temp_node, node_equals)){
 				if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
 					if (problem->goal_test(temp_node->node_state)){
-						manage_goal(frontier,esplored);
+						clean_list(frontier);
+						hash_table_destroy(esplored);
 						return temp_node;
 					}
 					push(frontier,temp_node);
@@ -52,9 +52,9 @@ struct IA_Node* depth_limited_search(struct Problem* problem, int limit){
 }
 
 struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit){
-	if (problem->goal_test(node->node_state)){
+	if (problem->goal_test(node->node_state))
 		return node;
-	} else {
+	else {
 		if (limit == 0){
 			return (struct IA_Node*)1;
 		} else {
@@ -86,7 +86,7 @@ struct IA_Node* iterative_deepening_search(struct Problem* problem){
 	for (; CUTOFF(result); i++){ //se la ricerca si interrompe per limiti di profondità, ne lanciamo una con profondità maggiore
 		result = depth_limited_search(problem,i);
 	}
-	printf("Il risultato è stato trovato ad una profondita paria a: %lld\n",i-1);
+	problem->depth_solution = i-1;
 	return result;
 }
 
@@ -100,12 +100,13 @@ struct IA_Node* uniform_cost_search(struct Problem* problem){
 	pr_push(frontier,node->path_cost,(void*)node);
 	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
 	
-	while (1){//mettere while !pr_empty 
-		if (pr_empty(frontier))  
-			return NULL; 
+	while (!pr_empty(frontier)){ 
 		node = (struct IA_Node*)pr_pop(frontier); /* chooses the lowest-cost node in frontier */ 
-		if (problem->goal_test(node->node_state))
+		if (problem->goal_test(node->node_state)){
+			pr_clean_list(frontier);
+			hash_table_destroy(esplored);
 			return node;
+		}
 		hash_table_insert(esplored, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
 		actions = problem->transition_functions(node->node_state); 
 		while(!empty(actions)){
@@ -114,13 +115,7 @@ struct IA_Node* uniform_cost_search(struct Problem* problem){
 				pr_push(frontier,child_node->path_cost,(void*)child_node);
 		}
 	}
+	return NULL;
 }
 
-
-void manage_goal(List* frontier, HashTable_p esplored){
-	printf("\nStati esplorati %d\n", esplored->recordInserted);
-	printf("Nodi rimasti in frontiera: %d\n", frontier->size);
-	clean_list(frontier);
-	hash_table_destroy(esplored);
-}
 

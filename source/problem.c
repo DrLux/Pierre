@@ -8,10 +8,10 @@ Problem* new_lake() {
     lake->goal_test = &lake_goal_test;
     lake->constraint_test = &lake_constraint_test;
     lake->print_state = &lake_print_state;
-    lake->print_solution = &lake_print_solution;
     lake->heuristic = &lake_heuristic;
     lake->step_cost = &lake_step_cost;
     lake->state_compare = &lake_state_compare;
+    lake->depth_solution = LAKE_DLS_LIMIT;
     return lake;
 }
 
