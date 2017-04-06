@@ -3,7 +3,6 @@
 Problem* new_lake() {
     struct Problem* lake = (Problem*)calloc(1,sizeof(Problem));;
     lake->initial_state = new_lake_initial_state();
-    lake->new_state = &new_lake_state; //questa a quanto pare non serve
     lake->transition_functions = &lake_transition_functions;
     lake->goal_test = &lake_goal_test;
     lake->constraint_test = &lake_constraint_test;

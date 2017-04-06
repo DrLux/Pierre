@@ -25,31 +25,11 @@ State* new_lake_initial_state(){
 	return new_generic_state;
 }
 
-
-
-Action* new_lake_move(int move_index) {
-    struct Action* actions = (Action*)calloc(1,sizeof(Action));
-    switch (move_index) {
-			case 0:
-				actions->move = &lake_move_man;
-				break; 
-			case 1:
-				actions->move = &lake_move_man_cabbage;
-				break; 
-			case 2:
-				actions->move = &lake_move_man_sheep;
-				break; 
-			case 3:
-				actions->move = &lake_move_man_wolf;
-				break; 
-			default:
-			   printf("Print nella default di new_lake_move");
-			   break;
-			}
-    
+Action* new_lake_move(Lake_Action moves) {
+    struct Action* actions = (Action*)calloc(1,sizeof(Action));    
+	actions->move = moves;
     return actions;
 }
-
 
 List* lake_transition_functions(State* generic_state){
 	List* list = NULL;
@@ -62,23 +42,28 @@ List* lake_transition_functions(State* generic_state){
 	    		switch (i) {
 				case 0:
 					temp_state = lake_move_man(generic_state);
+					if (lake_constraint_test(temp_state))	
+			   			push(list,(void*)new_lake_move(&lake_move_man));
 					break; 
 				case 1:
-					temp_state = lake_move_man_cabbage(generic_state);			   
+					temp_state = lake_move_man_cabbage(generic_state);
+					if (lake_constraint_test(temp_state))	
+			   			push(list,(void*)new_lake_move(&lake_move_man_cabbage));			   
 					break; 
 			    case 2:
 					temp_state = lake_move_man_sheep(generic_state);
+					if (lake_constraint_test(temp_state))	
+			   			push(list,(void*)new_lake_move(&lake_move_man_sheep));
 					break; 
 				case 3:
 					temp_state = lake_move_man_wolf(generic_state);
+					if (lake_constraint_test(temp_state))	
+			   			push(list,(void*)new_lake_move(&lake_move_man_wolf));
 					break; 
 				default:
 					printf("Print nella default di transiction_functions");
 					break;
-				}
-
-				if (lake_constraint_test(temp_state))	//dopo aver generato una possibile azione vedo se rispetta i vincoli
-			   			push(list,(void*)new_lake_move(i));
+				}	
 			} 
 		}		   		
 	}

@@ -8,7 +8,7 @@
 //aggiungere a problem anche il new_state. Nel costruttore del problema scelgo quale se usare lake_new_state o altri
 typedef struct Problem {
 	State* initial_state; //è un attributo
-	State* (*new_state)(); //funzione che genera un nuovo stato inizializzato(a questo livello di astrazione non so cosa è uno stato )
+	long int depth_solution;
 	List* (*transition_functions)(State* state);
 	Boolean (*goal_test)(State* state);
 	Boolean (*constraint_test)(State* state);
@@ -16,7 +16,6 @@ typedef struct Problem {
 	int (*heuristic)(State* state);
 	int (*step_cost)(State* state, int cost);
 	int (*state_compare)(void* state1, void* state2);
-	long int depth_solution;
 } Problem;
 
 //genera la struct che contiene tutte le informazioni del problema

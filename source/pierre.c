@@ -1,6 +1,6 @@
 #include <pierre.h>
 
-int main(){
+int maina(){
     struct Problem* problem = new_lake(); 
     resolve_iterative_deepening_search(problem);
     //resolve_depth_limited_search(problem);
