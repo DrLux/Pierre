@@ -6,10 +6,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> master
 #define EIGHT_PUZZLE_DLS_LIMIT 15
 #define LEN_MATRIX ((COLUMN * ROW)-1)
 #define COLUMN (3)
@@ -42,9 +39,6 @@ State* eight_puzzle_move_down(State* old_state);
 State* eight_puzzle_move_left(State* old_state);
 int eight_puzzle_heuristic(State* struct_state);
 int eight_puzzle_state_compare(void* state1, void* state2);
-<<<<<<< HEAD
 int manhattan(int col, int row, int val);
 Boolean isSolvable(State* state);
 
-=======
->>>>>>> master

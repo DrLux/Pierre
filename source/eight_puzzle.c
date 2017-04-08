@@ -4,7 +4,7 @@
 // Princeton: https://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html
 // relazioen http://www.marcomeoni.net/univ/ia/relazioneOTTO.pdf
 
-/*
+
 int main(){
 
 	srand(time(NULL));   // should only be called once
@@ -13,18 +13,18 @@ int main(){
 	//int i = 0;
 	//List* list = eight_puzzle_transition_functions(puzzle);
 
-	while(!empty(list)){
+	/*while(!empty(list)){
 		printf("Stato %d\n",i );
 		moves = (Action*)pop_fifo(list);
 		isSolvable(moves->move(puzzle));
-	}
+	}*/
 
 	for (int x = 0; x <100; x++)
 		isSolvable(new_eight_puzzle_initial_state());
 
 	return 0;
 }
-*/
+
 
 
 State* new_eight_puzzle_state(){
@@ -154,7 +154,6 @@ void gen_matrix(struct Eight_puzzle_state* state){
     */
 
     int temp_array[LEN_MATRIX+1] = { -1, -1,-1, -1,-1, -1,-1, -1, -1 };
-    int mtx[COLUMN][ROW];
     int numrand = 0;
 
     for (int c = 0; c < COLUMN; c++){
@@ -162,22 +161,13 @@ void gen_matrix(struct Eight_puzzle_state* state){
     		numrand = rand()%(LEN_MATRIX+1); 
     		if(temp_array[numrand] == -1){
     			temp_array[numrand] = numrand;
-    			mtx[c][r] = numrand;
+    			state->matrix[c][r] = numrand;
     		} else {
     			r--;
     		}
     	}
     }
 
-
-
-    for (int i = 0; i<= LEN_MATRIX; i++){
-		state->matrix[i/COLUMN][i%ROW] = mtx[i/COLUMN][i%ROW];
-		if ( mtx[i/COLUMN][i%ROW] == 0){
-			state->column_blank = i/COLUMN;
-			state->row_blank = i%ROW;
-		}
-	} 
 
 }
 

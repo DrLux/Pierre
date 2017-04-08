@@ -1,6 +1,6 @@
 #include <pierre.h>
 
-
+/*
 int main(){
     struct Problem* problem = new_eight_puzzle(); 
     struct State* puzzle = problem->initial_state;
@@ -14,7 +14,7 @@ int main(){
         moves = (Action*)pop_fifo(list);
         problem->heuristic(moves->move(puzzle));
     }
-}
+}*/
 
 void print_solution (struct IA_Node* node, struct Problem* problem){
 	if (node != NULL){
