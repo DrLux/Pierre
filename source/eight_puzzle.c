@@ -6,6 +6,7 @@
 
 /*
 int main(){
+<<<<<<< HEAD
 	srand(time(NULL));   // should only be called once
 	//struct State* puzzle = new_eight_puzzle_initial_state();
 	//struct Action* moves = NULL;
@@ -34,12 +35,45 @@ State* new_eight_puzzle_state(){
 }
 
 
+=======
+	struct State* puzzle = new_eight_puzzle_initial_state();
+	struct Action* moves = NULL;
+	int i = 0;
+	List* list = eight_puzzle_transition_functions(puzzle);
+
+	puts("Stato iniziale");
+	eight_puzzle_print_state(puzzle);
+
+	while(!empty(list)){
+		printf("Stato %d\n",i );
+		i++;
+		moves = (Action*)pop_fifo(list);
+		eight_puzzle_print_state(moves->move(puzzle));
+	}
+
+
+	//if (eight_puzzle_goal_test(puzzle))
+		//puts("Vittoria");
+	//eight_puzzle_print_state(puzzle);
+}
+*/
+
+State* new_eight_puzzle_state(){
+	struct State* new_generic_state = new_state();
+	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
+	new_generic_state->state = (void*)ep_root_state;
+	return new_generic_state;
+}
+
+
+>>>>>>> master
 State* new_eight_puzzle_initial_state(){
 	struct State* new_generic_state = new_state();
 	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
 	gen_matrix(ep_root_state);
 	new_generic_state->state = (void*)ep_root_state;
 	return new_generic_state;
+<<<<<<< HEAD
 }
 
 Action* new_eight_puzzle_move(Eight_puzzle_Action moves) {
@@ -48,6 +82,16 @@ Action* new_eight_puzzle_move(Eight_puzzle_Action moves) {
     return actions;
 }
 
+=======
+}
+
+Action* new_eight_puzzle_move(Eight_puzzle_Action moves) {
+    struct Action* actions = (Action*)calloc(1,sizeof(Action));    
+	actions->move = moves;
+    return actions;
+}
+
+>>>>>>> master
 List* eight_puzzle_transition_functions(State* generic_state){
 	List* list = NULL;
 	if (generic_state != NULL && generic_state->state != NULL){
@@ -98,6 +142,7 @@ int eight_puzzle_step_cost(State* struct_state, int cost){
 	return cost+1; //problema di costo unitario
 }
 
+<<<<<<< HEAD
 int eight_puzzle_heuristic(State* generic_state){
 	int total = 0;
 	for(int c = 0; c < COLUMN; c++)
@@ -117,6 +162,10 @@ int manhattan(int col, int row, int val){
 	}
 
 	return (abs(goal_c - col) + abs(goal_r - row) );
+=======
+int eight_puzzle_heuristic(State* struct_state){
+	return 1; //per ora non viene usata
+>>>>>>> master
 }
 
 void eight_puzzle_print_state(State* generic_state){
@@ -143,6 +192,7 @@ void eight_puzzle_print_state(State* generic_state){
 
 
 void gen_matrix(struct Eight_puzzle_state* state){
+<<<<<<< HEAD
 	/*int mtx[COLUMN][ROW] = {{7, 2, 4},
     		                {5, 0, 6},  // Value 0 is used for empty space
             		        {8, 3, 1}};
@@ -164,6 +214,11 @@ void gen_matrix(struct Eight_puzzle_state* state){
     	}
     }
 
+=======
+	int mtx[COLUMN][ROW] = {{1, 2, 3},
+    		                {4, 0, 6},  // Value 0 is used for empty space
+            		        {7, 5, 8}};
+>>>>>>> master
 
     for (int i = 0; i<= LEN_MATRIX; i++){
 		state->matrix[i/COLUMN][i%ROW] = mtx[i/COLUMN][i%ROW];
@@ -263,6 +318,7 @@ int eight_puzzle_state_compare(void* state1, void* state2){
 			ret = st1->matrix[i/COLUMN][i%ROW] == st2->matrix[i/COLUMN][i%ROW];	
 	}
     return !ret;
+<<<<<<< HEAD
 }
 
 //torna 1 quando è true
@@ -278,3 +334,6 @@ Boolean isSolvable(State* state){
     return (count % 2);
 }
 
+=======
+}
+>>>>>>> master

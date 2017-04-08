@@ -14,8 +14,12 @@ Problem* new_lake() {
     return lake;
 }
 
+<<<<<<< HEAD
 Problem* new_eight_puzzle(){
     //srand(time(NULL));   
+=======
+Problem* new_eight_puzzle() {
+>>>>>>> master
     struct Problem* eight_puzzle = (Problem*)calloc(1,sizeof(Problem));;
     eight_puzzle->initial_state = new_eight_puzzle_initial_state();
     eight_puzzle->transition_functions = &eight_puzzle_transition_functions; 
