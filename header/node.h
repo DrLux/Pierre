@@ -23,4 +23,4 @@ IA_Node* new_ia_node();
 void node_reset_count();
 long int get_num_nodes();
 
-
+void clean_ia_node(struct IA_Node* actual);

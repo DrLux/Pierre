@@ -1,12 +1,27 @@
 #include <pierre.h>
+/*
+int main(){
+    struct Problem* problem = new_eight_puzzle(); 
+    struct State* puzzle = problem->initial_state;
+    struct Action* moves = NULL;
+    puts("Iniziamo");
+    List* list = problem->transition_functions(puzzle);
 
-int maina(){
-    struct Problem* problem = new_lake(); 
+    while(!empty(list)){
+        moves = (Action*)pop_fifo(list);
+        problem->print_state(moves->move(puzzle));
+    }
+}*/
+
+
+
+
+int main(){
+    struct Problem* problem = new_eight_puzzle(); 
     resolve_iterative_deepening_search(problem);
     //resolve_depth_limited_search(problem);
-    //resolve_breadth_search(problem);
+    //resolve_depth_limited_search(problem);
     //resolve_uniform_cost_search(problem);  
-  
     return 0;
 }
 
@@ -46,7 +61,7 @@ void resolve_depth_limited_search(struct Problem* problem){
     if (FAILURE(node_solution))
         puts("La ricerca in Profondità Limitata non ha prodotto risultati.");
     if (CUTOFF(node_solution))
-        puts("Il limite inserito è troppo stringente.");
+        printf("La soluzione non è stata trovata entro un limite di %ld nodi.\n", problem->depth_solution);
     else{
         puts("Problema risolto con Ricerca in Profondità Limitata");
         print_solution(node_solution,problem);

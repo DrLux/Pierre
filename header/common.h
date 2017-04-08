@@ -3,6 +3,8 @@
 #ifndef __LIST__
 	#include <list.h>
 #endif
+#include <stdio.h>
+#include <string.h> //per il memcpy
 
 #define Boolean int
 #define true 1

@@ -29,7 +29,7 @@ struct IA_Node* breadth_search(struct Problem* problem){
 		while(!empty(actions)){
 			temp_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
 			if (!is_present(frontier, (void*)temp_node, node_equals)){
-				if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){
+				if (hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare) != NULL){	
 					if (problem->goal_test(temp_node->node_state)){
 						clean_list(frontier);
 						hash_table_destroy(esplored);
@@ -65,14 +65,17 @@ struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, in
 			while(!empty(actions)){
 				child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
 				ret = dls_recursive(child,problem,limit-1);
-				if (CUTOFF(ret))
+				if (CUTOFF(ret)){
+					clean_ia_node(child);
 					cutoff_occured = true; //è necessario?
+				}
 				else 
 					if (!FAILURE(ret)) 
 						return ret;
 			}
-			if (cutoff_occured)
+			if (cutoff_occured){
 				return (struct IA_Node*)1;
+			}
 			else
 				return NULL;
 		}
