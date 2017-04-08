@@ -4,6 +4,10 @@
 	#include <lake.h>
 #endif
 
+#ifndef __EIGHT_PUZZLE__
+	#include <eight_puzzle.h>
+#endif
+
 // 0 = Uomo, 1 = Cavolo, 2 = Pecola, 3 = Lupo
 //aggiungere a problem anche il new_state. Nel costruttore del problema scelgo quale se usare lake_new_state o altri
 typedef struct Problem {
@@ -20,3 +24,6 @@ typedef struct Problem {
 
 //genera la struct che contiene tutte le informazioni del problema
 Problem* new_lake();
+
+Problem* new_eight_puzzle();
+

@@ -16,7 +16,7 @@ IA_Node* new_ia_node() {
 
 struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, struct Action* new_step){
     struct IA_Node* child = new_ia_node(); 
-	child->node_state = new_step->move(actual->node_state);//da rendere void, il nuovo stato è null e non una struct vuota
+	child->node_state = new_step->move(actual->node_state);
 	child->parent = actual;
 	child->node_action = new_step;
 	child->path_cost = problem->step_cost(actual->node_state, actual->path_cost);
@@ -38,4 +38,8 @@ void node_reset_count(){
 
 long int get_num_nodes(){
     return id_nodes;
+}
+
+void clean_ia_node(struct IA_Node* actual){
+    free((void*)actual);
 }

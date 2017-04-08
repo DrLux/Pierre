@@ -202,7 +202,7 @@ Lake_state* extract_lake_state (State* generic_state){
 //torna 0 se sono uguali, 1 altrimenti
 int lake_state_compare(void* state1, void* state2){
 
-	int ret = false;
+	Boolean ret = false;
 	if (state1 != NULL && state2 != NULL){
 		Lake_state* st1 = extract_lake_state((State*)state1);
 		Lake_state* st2 = extract_lake_state((State*)state2);
