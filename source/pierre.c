@@ -1,9 +1,10 @@
 #include <pierre.h>
-/*
+
+
 int main(){
     struct Problem* problem = new_eight_puzzle(); 
     struct State* puzzle = problem->initial_state;
-<<<<<<< HEAD
+
     problem->heuristic(puzzle);
     struct Action* moves = NULL;
     puts("Iniziamo");
@@ -14,35 +15,6 @@ int main(){
         problem->heuristic(moves->move(puzzle));
     }
 }
-*/
-
-
-
-int maina(){
-=======
-    struct Action* moves = NULL;
-    puts("Iniziamo");
-    List* list = problem->transition_functions(puzzle);
-
-    while(!empty(list)){
-        moves = (Action*)pop_fifo(list);
-        problem->print_state(moves->move(puzzle));
-    }
-}*/
-
-
-
-
-int main(){
->>>>>>> master
-    struct Problem* problem = new_eight_puzzle(); 
-    resolve_iterative_deepening_search(problem);
-    //resolve_depth_limited_search(problem);
-    //resolve_depth_limited_search(problem);
-    //resolve_uniform_cost_search(problem);  
-    return 0;
-}
-
 
 void print_solution (struct IA_Node* node, struct Problem* problem){
 	if (node != NULL){

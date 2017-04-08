@@ -14,12 +14,9 @@ Problem* new_lake() {
     return lake;
 }
 
-<<<<<<< HEAD
+
 Problem* new_eight_puzzle(){
-    //srand(time(NULL));   
-=======
-Problem* new_eight_puzzle() {
->>>>>>> master
+    srand(time(NULL));   
     struct Problem* eight_puzzle = (Problem*)calloc(1,sizeof(Problem));;
     eight_puzzle->initial_state = new_eight_puzzle_initial_state();
     eight_puzzle->transition_functions = &eight_puzzle_transition_functions; 
@@ -28,7 +25,7 @@ Problem* new_eight_puzzle() {
     eight_puzzle->heuristic = &eight_puzzle_heuristic;
     eight_puzzle->step_cost = &eight_puzzle_step_cost;
     eight_puzzle->state_compare = &eight_puzzle_state_compare;
-    eight_puzzle->depth_solution = 1;//EIGHT_PUZZLE_DLS_LIMIT;
+    eight_puzzle->depth_solution = EIGHT_PUZZLE_DLS_LIMIT;
     return eight_puzzle;
 }
 
