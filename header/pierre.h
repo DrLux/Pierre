@@ -9,3 +9,4 @@ void resolve_uniform_cost_search(struct Problem* problem);
 void resolve_iterative_deepening_search(struct Problem* problem);
 void resolve_depth_limited_search(struct Problem* problem);
 void resolve_breadth_search(struct Problem* problem);
+void resolve_astar(struct Problem* problem);

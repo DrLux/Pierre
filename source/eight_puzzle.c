@@ -4,27 +4,32 @@
 // Princeton: https://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html
 // relazioen http://www.marcomeoni.net/univ/ia/relazioneOTTO.pdf
 
-
-int maina(){
+/*
+int main(){
 
 	srand(time(NULL));   // should only be called once
-	//struct State* puzzle = new_eight_puzzle_initial_state();
-	//struct Action* moves = NULL;
-	//int i = 0;
-	//List* list = eight_puzzle_transition_functions(puzzle);
+	for (int x = 0; x < 40; x++){
+		printf("%d\n", x);
+		new_eight_puzzle_initial_state();
+	}
 
-	/*while(!empty(list)){
+	struct State* puzzle = new_eight_puzzle_initial_state();
+	struct Action* moves = NULL;
+	int i = 0;
+	List* list = eight_puzzle_transition_functions(puzzle);
+	puts("Stato iniziale");
+	eight_puzzle_print_state(puzzle);
+
+
+	while(!empty(list)){
 		printf("Stato %d\n",i );
 		moves = (Action*)pop_fifo(list);
-		isSolvable(moves->move(puzzle));
-	}*/
-
-	for (int x = 0; x <100; x++)
-		isSolvable(new_eight_puzzle_initial_state());
+		eight_puzzle_print_state(moves->move(puzzle));
+	}
 
 	return 0;
 }
-
+*/
 
 
 State* new_eight_puzzle_state(){
@@ -39,6 +44,7 @@ State* new_eight_puzzle_initial_state(){
 	struct State* new_generic_state = new_state();
 	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
 	gen_matrix(ep_root_state);
+	//manual_gen_matrix(ep_root_state);
 	new_generic_state->state = (void*)ep_root_state;
 	return new_generic_state;
 }
@@ -147,19 +153,17 @@ void eight_puzzle_print_state(State* generic_state){
 
 
 void gen_matrix(struct Eight_puzzle_state* state){
-
-	/*int mtx[COLUMN][ROW] = {{7, 2, 4},
-    		                {5, 0, 6},  // Value 0 is used for empty space
-            		        {8, 3, 1}};
-    */
-
-    int temp_array[LEN_MATRIX+1] = { -1, -1,-1, -1,-1, -1,-1, -1, -1 };
+	int temp_array[LEN_MATRIX+1] = { -1, -1,-1, -1,-1, -1,-1, -1, -1 };
     int numrand = 0;
 
     for (int c = 0; c < COLUMN; c++){
     	for (int r = 0; r < ROW; r++){
     		numrand = rand()%(LEN_MATRIX+1); 
     		if(temp_array[numrand] == -1){
+    			if (numrand == BLANK){
+    				state->column_blank = c;
+   					state->row_blank = r;
+    			}
     			temp_array[numrand] = numrand;
     			state->matrix[c][r] = numrand;
     		} else {
@@ -167,8 +171,35 @@ void gen_matrix(struct Eight_puzzle_state* state){
     		}
     	}
     }
+    if (!isSolvable(state))
+    	gen_matrix(state);
+    
+}
 
+//torna 1 quando è true
+Boolean isSolvable(struct Eight_puzzle_state* state){
+	int count = 1;
+    for (int c = 0; c < COLUMN; c++)
+        for (int r = 1; r < ROW; r++)
+             if (state->matrix[c][r-1] > state->matrix[c][r])
+                  count++;
+    return (count % 2);
+}
 
+void manual_gen_matrix(struct Eight_puzzle_state* state){
+	int mtx[COLUMN][ROW] = {{1, 0, 3},
+    		                {5, 2, 6},  // Value 0 is used for empty space
+            		        {4, 7, 8}};
+
+    for (int c = 0; c < COLUMN; c++){
+    	for (int r = 0; r < ROW; r++){
+    		if (mtx[c][r] == BLANK){
+			    state->column_blank = c;
+				state->row_blank = r;
+    		}
+			state->matrix[c][r] = mtx[c][r];
+    	}
+    }
 }
 
 
@@ -262,15 +293,6 @@ int eight_puzzle_state_compare(void* state1, void* state2){
 
 }
 
-//torna 1 quando è true
-Boolean isSolvable(State* state){
-	int count = 1;
-    for (int c = 0; c < COLUMN; c++)
-        for (int r = 1; r < ROW; r++)
-             if (extract_state(state)->matrix[c][r-1] > extract_state(state)->matrix[c][r])
-                  count++;
-    return (count % 2);
-}
 
 
 

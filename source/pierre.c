@@ -1,20 +1,12 @@
 #include <pierre.h>
 
-/*
 int main(){
     struct Problem* problem = new_eight_puzzle(); 
-    struct State* puzzle = problem->initial_state;
+    //resolve_breadth_search(problem);
 
-    problem->heuristic(puzzle);
-    struct Action* moves = NULL;
-    puts("Iniziamo");
-    List* list = problem->transition_functions(puzzle);
-
-    while(!empty(list)){
-        moves = (Action*)pop_fifo(list);
-        problem->heuristic(moves->move(puzzle));
-    }
-}*/
+    resolve_astar(problem);
+    return 0;
+}
 
 void print_solution (struct IA_Node* node, struct Problem* problem){
 	if (node != NULL){
@@ -81,6 +73,18 @@ void resolve_uniform_cost_search(struct Problem* problem){
     }
     else    
         puts("La Riceca a Costo Uniforme non ha prodotto risultati.");
+    node_reset_count();
+    state_reset_count();
+}
+
+void resolve_astar(struct Problem* problem){
+    struct IA_Node* node_solution = AStar(problem);
+    if (node_solution != NULL){
+         puts("Problema risolto con A*");
+        print_solution(node_solution, problem);
+    }
+    else    
+        puts("A* non ha prodotto risultati.");
     node_reset_count();
     state_reset_count();
 }

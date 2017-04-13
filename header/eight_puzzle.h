@@ -40,5 +40,6 @@ State* eight_puzzle_move_left(State* old_state);
 int eight_puzzle_heuristic(State* struct_state);
 int eight_puzzle_state_compare(void* state1, void* state2);
 int manhattan(int col, int row, int val);
-Boolean isSolvable(State* state);
+Boolean isSolvable(struct Eight_puzzle_state* state);
+void manual_gen_matrix(struct Eight_puzzle_state* state);
 

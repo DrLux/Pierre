@@ -10,8 +10,8 @@ void swappa(void** e1, void** e2) {
 }
 
 //la grandezza di default è 1
-Pr_List new_pr_list() {
-    Pr_List newpq = (Pr_List) calloc(1,sizeof(heap_list));
+heap_list new_pr_list() {
+    heap_list newpq = (heap_list) calloc(1,sizeof(Pr_List));
     newpq->queue = (void**) calloc(1,sizeof(void*));
     newpq->inserted = 0;
     newpq->size = 1;
@@ -19,15 +19,23 @@ Pr_List new_pr_list() {
 }
 
 
-void pr_destroy(Pr_List pq) {
+void pr_destroy(heap_list pq) {
     if (pq) {
     free(pq->queue);
     free(pq);
   }
 }
 
+//ritornare direttamente la condizione dell' if
+int pr_empty(heap_list pq){
+  if (pq == NULL || pq->inserted == 0 || pq->size == 0 || pq->queue == NULL)
+    return 1;
+  else
+    return 0;
+}
+
 //la lista si riadatta automaticamente
-void pr_insert(Pr_List pq, void* element) {
+void pr_insert(heap_list pq, void* element) {
     if (pq->inserted == pq->size) {
         pq->size = pq->size*2;
         pq->queue = (void**)realloc(pq->queue, pq->size * sizeof(void*));
@@ -69,7 +77,7 @@ void min_heapify(void** array, size_t inserted, PRCompFunction compare) {
 }
 
 //estrae il primo elemento della lista
-void* pr_pop_min(Pr_List pq, PRCompFunction compare) {
+void* pr_pop_min(heap_list pq, PRCompFunction compare) {
     if (pq->inserted > 0){
     min_heapify(pq->queue, pq->inserted, compare);
     void* min = pq->queue[0];
@@ -92,14 +100,14 @@ int ciao(void* ptr1, void* ptr2) {
     return 1;
 }
 
-void print_queue(Pr_List pq) {
+void print_queue(heap_list pq) {
     for (int i = 0; i < pq->inserted; i++)
       printf("Il nodo ad indice %d vale: %d\n", i,*((int*)pq->queue[i]));
 }
 */
 
 //torna null se l' elemento non è presente
-void* pr_isPresent(Pr_List pq, void* elem,PRCompFunction compare) {
+void* pr_isPresent(heap_list pq, void* elem,PRCompFunction compare) {
     for (int i = 0; i < pq->inserted; i++){
       if (compare(pq->queue[i], elem) == 0)
         return pq->queue[i];
@@ -109,7 +117,7 @@ void* pr_isPresent(Pr_List pq, void* elem,PRCompFunction compare) {
 /*
 int main(){
     //testare la pop
-    heap_list* Open = new_pr_list();
+    Pr_List* Open = new_heap_list();
     int* x = 0;
 
     int a = 1;

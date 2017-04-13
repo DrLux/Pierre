@@ -34,6 +34,17 @@ int node_equals(void* node1, void* node2){
     return ret;
 }
 
+//negativo se il primo è minore del secondoa
+int node_compare_cost(void* node1, void* node2) {
+    float i1 =  ((IA_Node*)node1)->total_cost;
+    float i2 =  ((IA_Node*)node2)->total_cost;
+
+    if (i1 < i2) return -1;
+    if (i1 == i2) return 0;
+
+    return 1;
+}
+
 void node_reset_count(){
     id_nodes = 0;
 }

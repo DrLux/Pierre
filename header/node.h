@@ -18,10 +18,12 @@ typedef struct IA_Node {
 
 struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, struct Action* move);
 //i 2 nodi sono a void perche devono avere a che fare con le liste
-int node_equals(void* node1, void* node2);
+int node_equals(void* node1, void* node2); //torna 1 quando sono uguali
 
 IA_Node* new_ia_node();
 void node_reset_count();
 long int get_num_nodes();
+int node_compare_cost(void* node1, void* node2);
+
 
 void clean_ia_node(struct IA_Node* actual);
