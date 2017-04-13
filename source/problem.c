@@ -1,5 +1,7 @@
 #include <problem.h>
 
+
+
 Problem* new_lake() {
     struct Problem* lake = (Problem*)calloc(1,sizeof(Problem));;
     lake->initial_state = new_lake_initial_state();
@@ -11,6 +13,8 @@ Problem* new_lake() {
     lake->step_cost = &lake_step_cost;
     lake->state_compare = &lake_state_compare;
     lake->depth_solution = LAKE_DLS_LIMIT;
+
+    state_compare =  &lake_state_compare;
     return lake;
 }
 
@@ -26,6 +30,8 @@ Problem* new_eight_puzzle(){
     eight_puzzle->step_cost = &eight_puzzle_step_cost;
     eight_puzzle->state_compare = &eight_puzzle_state_compare;
     eight_puzzle->depth_solution = EIGHT_PUZZLE_DLS_LIMIT;
+
+    state_compare =  &eight_puzzle_state_compare;
     return eight_puzzle;
 }
 

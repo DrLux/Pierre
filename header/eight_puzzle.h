@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 
-#define EIGHT_PUZZLE_DLS_LIMIT 15
+#define EIGHT_PUZZLE_DLS_LIMIT 32
 #define LEN_MATRIX ((COLUMN * ROW)-1)
 #define COLUMN (3)
 #define ROW  (3)  

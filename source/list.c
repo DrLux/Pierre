@@ -87,12 +87,13 @@ void clean_list(List* list){
 	}
 }
 
+//torna 1 quando c'è
 int is_present(List* list, void* ptr, EqualsFunction equals){
 	int ret = 0;
 	if (list != NULL){
 		List_Node* iterator = list->sentinel->next;
-		while (iterator != NULL && !ret){
-			ret = equals(ptr, iterator->cargo);
+		while (iterator != NULL && ret == 0){
+			ret = !(equals(ptr, iterator->cargo) == 0);
 			iterator = iterator->next;
 		}
 	}

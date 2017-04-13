@@ -1,10 +1,12 @@
 #include <pierre.h>
 
 int main(){
-    struct Problem* problem = new_eight_puzzle(); 
+    //struct Problem* problem = new_eight_puzzle();
+    struct Problem* problem = new_lake();
+    secret_hash(problem);
     //resolve_breadth_search(problem);
+    //resolve_astar(problem);
 
-    resolve_astar(problem);
     return 0;
 }
 
@@ -14,12 +16,19 @@ void print_solution (struct IA_Node* node, struct Problem* problem){
         printf("Stati generati: %ld\n", get_num_states()); 
         printf("Nodi generati: %ld\n", get_num_nodes()); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
         printf("\n\t ** Soluzione ** \n");
+        List* solution = new_list();
         
-        while (node != NULL){
-            printf("\n\t ** State N. %d ** \n", num_state++);
-            problem->print_state((void*)node->node_state);
+        /*while(node != NULL){
+            push(solution,(void*)node);
             node = node->parent;
         }
+        
+        while (!empty(solution)){
+            printf("\n\t ** State N. %d ** \n", num_state++);
+            node = (struct IA_Node*)pop_lifo(solution);
+            problem->print_state(node->node_state);
+        }*/
+
 	} else
 		puts("La soluzione non è stata trovata");
 }
@@ -80,7 +89,7 @@ void resolve_uniform_cost_search(struct Problem* problem){
 void resolve_astar(struct Problem* problem){
     struct IA_Node* node_solution = AStar(problem);
     if (node_solution != NULL){
-         puts("Problema risolto con A*");
+        puts("Problema risolto con A*");
         print_solution(node_solution, problem);
     }
     else    

@@ -8,8 +8,9 @@
 	#include <eight_puzzle.h>
 #endif
 
+int (*state_compare)(void* state1, void* state2); //variabile globale che permette di confrontare due NODE secondo i loro stati.La inizializzo nelle new
+
 // 0 = Uomo, 1 = Cavolo, 2 = Pecola, 3 = Lupo
-//aggiungere a problem anche il new_state. Nel costruttore del problema scelgo quale se usare lake_new_state o altri
 typedef struct Problem {
 	State* initial_state; //è un attributo
 	long int depth_solution;
@@ -26,4 +27,6 @@ typedef struct Problem {
 Problem* new_lake();
 
 Problem* new_eight_puzzle();
+
+
 

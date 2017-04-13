@@ -43,9 +43,10 @@ State* new_eight_puzzle_state(){
 State* new_eight_puzzle_initial_state(){
 	struct State* new_generic_state = new_state();
 	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
-	gen_matrix(ep_root_state);
-	//manual_gen_matrix(ep_root_state);
+	//gen_matrix(ep_root_state);
+	manual_gen_matrix(ep_root_state);
 	new_generic_state->state = (void*)ep_root_state;
+	eight_puzzle_print_state(new_generic_state);
 	return new_generic_state;
 }
 
@@ -187,9 +188,9 @@ Boolean isSolvable(struct Eight_puzzle_state* state){
 }
 
 void manual_gen_matrix(struct Eight_puzzle_state* state){
-	int mtx[COLUMN][ROW] = {{1, 0, 3},
-    		                {5, 2, 6},  // Value 0 is used for empty space
-            		        {4, 7, 8}};
+	int mtx[COLUMN][ROW] = {{1, 5, 4},
+    		                {6, 8, 2},  // Value 0 is used for empty space
+            		        {7, 3, 0}};
 
     for (int c = 0; c < COLUMN; c++){
     	for (int r = 0; r < ROW; r++){

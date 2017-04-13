@@ -2,6 +2,7 @@
 
 long int id_nodes = 0;
 
+
 IA_Node* new_ia_node() {
     struct IA_Node* new_node = (IA_Node*)calloc(1,sizeof(IA_Node));;
     new_node->id = id_nodes++;
@@ -26,7 +27,8 @@ struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, s
 	return child;
 }
 
-int node_equals(void* node1, void* node2){
+
+int compare_node_id(void* node1, void* node2){
     int ret = false;
     if (node1 != NULL && node2 != NULL){
         ret = (((IA_Node*)node1)->id == ((IA_Node*)node2)->id);
@@ -35,7 +37,7 @@ int node_equals(void* node1, void* node2){
 }
 
 //negativo se il primo è minore del secondoa
-int node_compare_cost(void* node1, void* node2) {
+int compare_node_cost(void* node1, void* node2) {
     float i1 =  ((IA_Node*)node1)->total_cost;
     float i2 =  ((IA_Node*)node2)->total_cost;
 
@@ -43,6 +45,11 @@ int node_compare_cost(void* node1, void* node2) {
     if (i1 == i2) return 0;
 
     return 1;
+}
+
+
+int compare_node_state(void* node1, void* node2){
+    return state_compare( ((struct IA_Node*)node1)->node_state, ((struct IA_Node*)node2)->node_state);
 }
 
 void node_reset_count(){
