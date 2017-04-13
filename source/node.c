@@ -10,6 +10,7 @@ IA_Node* new_ia_node() {
     new_node->node_action = NULL;
     new_node->path_cost = 0;
     new_node->heuristic_Cost = 0;
+    new_node->total_cost = 0;
     new_node->child_ia_node = &child_ia_node;
     return new_node;
 }
@@ -21,6 +22,7 @@ struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, s
 	child->node_action = new_step;
 	child->path_cost = problem->step_cost(actual->node_state, actual->path_cost);
 	child->heuristic_Cost = problem->heuristic(actual->node_state);
+    child->total_cost = child->heuristic_Cost + child->path_cost;
 	return child;
 }
 

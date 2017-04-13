@@ -93,8 +93,9 @@ struct IA_Node* iterative_deepening_search(struct Problem* problem){
 	return result;
 }
 
+struct IA_Node* uniform_cost_search(struct Problem* problem){return NULL;}
+/*
 //non ben testata
-struct IA_Node* uniform_cost_search(struct Problem* problem){
 	struct IA_Node* node = new_ia_node();
 	List* actions = NULL;
 	struct IA_Node* child_node = NULL;
@@ -104,7 +105,7 @@ struct IA_Node* uniform_cost_search(struct Problem* problem){
 	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
 	
 	while (!pr_empty(frontier)){ 
-		node = (struct IA_Node*)pr_pop(frontier); /* chooses the lowest-cost node in frontier */ 
+		node = (struct IA_Node*)pr_pop(frontier); //chooses the lowest-cost node in frontier 
 		if (problem->goal_test(node->node_state)){
 			pr_clean_list(frontier);
 			hash_table_destroy(esplored);
@@ -114,11 +115,55 @@ struct IA_Node* uniform_cost_search(struct Problem* problem){
 		actions = problem->transition_functions(node->node_state); 
 		while(!empty(actions)){
 			child_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));	
-  			if (hash_table_search(esplored, (void*)&child_node->node_state->id, hashing, problem->state_compare) == NULL || !pr_ispresent(frontier,(void*)child_node, node_equals) )
+  			if (hash_table_search(esplored, (void*)&child_node->node_state->id, hashing, problem->state_compare) == NULL || pr_ispresent(frontier,(void*)child_node, node_equals) == NULL )
 				pr_push(frontier,child_node->path_cost,(void*)child_node);
 		}
 	}
 	return NULL;
 }
+*/
+
+/*
+struct IA_Node* AStar(struct Problem* problem){
+	HashTable_p Closed = hash_table_create(HASHMAP_INITIAL_SIZE);
+	pr_heap* Open = new_pr_list();
+	struct IA_Node* node = new_ia_node();
+	struct IA_Node* child = NULL;
+	struct IA_Node* temp_node = NULL;
+	
+	node->node_state = problem->initial_state;
+	node->path_cost = node->heuristic_Cost;
+	Boolean found = false;
+
+	pr_push(Open,node->total_cost,(void*)node);
+	while( !pr_empty(Open) && !found ){
+		node = (struct IA_Node*)pr_pop(Open);
+		//non posso inserire solo lo stato sta volta hash_table_insert(Closed, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
+		if (problem->goal_test(node->node_state)){
+			found = true;
+			hash_table_destroy(Closed);
+			pr_clean_list(Open);
+		} else {
+			List* actions = problem->transition_functions(node->node_state);
+			while(!empty(actions)){
+				child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
+				temp_node = hash_table_search(esplored, (void*)&node->node_state->id, hashing, problem->state_compare);
+				if (temp_node != NULL)
+					if (child->total_cost < temp_node->total_cost)
 
 
+				//if (//!pr_ispresent(Open,(void*)child_node, node_equals) && // == NULL)
+					pr_push(Open,node->total_cost,(void*)child);
+				else {
+
+				}
+			}
+		}
+
+	}
+
+}
+*/
+// nelle hashtable inserisco i nodi ma il compare lo devo fare sugli stati. Nodi diversi che hanno uno stesso stato. Mentre ora verifico solo se due nodi hanno lo stesso id e non mi serve a nulla
+// quando verifico se il nuovo peso è minore di quello registrato in precedenza devo farlo prendendo il peso del child e il peso registrato nel nodo in hash con lo stesso stato del child
+// idem per la ricerca sulle liste che deve tornare un puntatore all'ogetto trovato

@@ -19,3 +19,4 @@ struct IA_Node* depth_limited_search(struct Problem* problem, int limit);
 struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit);
 struct IA_Node* iterative_deepening_search(struct Problem* problem);
 struct IA_Node* uniform_cost_search(struct Problem* problem);
+int cost (struct IA_Node* node);

@@ -1,89 +1,141 @@
 #include <priority_list.h>
 
-void pr_push (pr_heap *h, long int priority, void* data) {
-    if (h->len + 1 >= h->size) {
-        h->size = h->size ? h->size * 2 : 4;
-        h->nodes = (pr_node *)realloc(h->nodes, h->size * sizeof (pr_node));
-    }
-    int i = h->len + 1;
-    int j = i / 2;
-    while (i > 1 && h->nodes[j].priority > priority) {
-        h->nodes[i] = h->nodes[j];
-        i = j;
-        j = j / 2;
-    }
-    h->nodes[i].priority = priority;
-    h->nodes[i].data = data;
-    h->len++;
+#define PARENT(i) ((i)-1)/2
+#define LEFT_CHILD(i) (2*(i))+1
+
+void swappa(void** e1, void** e2) {
+  void* tmp = *e1;
+  *e1 = *e2;
+  *e2 = tmp;
 }
- 
-void* pr_pop (pr_heap *h) {
-    if (!h->len) {
+
+//la grandezza di default è 1
+Pr_List new_pr_list() {
+    Pr_List newpq = (Pr_List) calloc(1,sizeof(heap_list));
+    newpq->queue = (void**) calloc(1,sizeof(void*));
+    newpq->inserted = 0;
+    newpq->size = 1;
+    return newpq;
+}
+
+
+void pr_destroy(Pr_List pq) {
+    if (pq) {
+    free(pq->queue);
+    free(pq);
+  }
+}
+
+//la lista si riadatta automaticamente
+void pr_insert(Pr_List pq, void* element) {
+    if (pq->inserted == pq->size) {
+        pq->size = pq->size*2;
+        pq->queue = (void**)realloc(pq->queue, pq->size * sizeof(void*));
+    }
+    pq->queue[pq->inserted] = element;
+    pq->inserted++;
+}
+
+
+void sift_down(void** array, int root, int end, PRCompFunction compare) {
+  int child = LEFT_CHILD(root),
+      swp = root;
+
+  while(child <= end) {
+
+    if (compare(array[swp], array[child]) > 0)
+      swp = child;
+
+    if (child+1 <= end && compare(array[swp], array[child+1]) > 0)
+      swp = child + 1;
+
+    if (swp != root) {
+      swappa(&array[root], &array[swp]);
+      root = swp;
+    } else
+      break;
+
+    child = LEFT_CHILD(root);
+  }
+
+}
+
+
+void min_heapify(void** array, size_t inserted, PRCompFunction compare) {
+  if (inserted > 1){
+    for (int i = PARENT((int)inserted - 1); i >= 0; i--)
+      sift_down(array, i, inserted - 1, compare);
+  }
+}
+
+//estrae il primo elemento della lista
+void* pr_pop_min(Pr_List pq, PRCompFunction compare) {
+    if (pq->inserted > 0){
+    min_heapify(pq->queue, pq->inserted, compare);
+    void* min = pq->queue[0];
+    pq->queue[0] = pq->queue[pq->inserted-1];
+    pq->inserted--;
+    return min;
+  } else
         return NULL;
+}
+
+/*
+per debug
+int ciao(void* ptr1, void* ptr2) {
+    int i1 =  *((int*)ptr1);
+    int i2 =  *((int*)ptr2);
+
+    if (i1 < i2) return -1;
+    if (i1 == i2) return 0;
+
+    return 1;
+}
+
+void print_queue(Pr_List pq) {
+    for (int i = 0; i < pq->inserted; i++)
+      printf("Il nodo ad indice %d vale: %d\n", i,*((int*)pq->queue[i]));
+}
+*/
+
+//torna null se l' elemento non è presente
+void* pr_isPresent(Pr_List pq, void* elem,PRCompFunction compare) {
+    for (int i = 0; i < pq->inserted; i++){
+      if (compare(pq->queue[i], elem) == 0)
+        return pq->queue[i];
     }
-    void* data = h->nodes[1].data;
-    h->nodes[1] = h->nodes[h->len];
-    h->len--;
-    heapify(h);
-    return data;
+    return NULL;
 }
+/*
+int main(){
+    //testare la pop
+    heap_list* Open = new_pr_list();
+    int* x = 0;
 
-void heapify (pr_heap* h){
-    long int j = 0;
-    long int k = 0;
-    long int i = 1;
-    while(1) {
-        k = i;
-        j = 2 * i;
-        if (j <= h->len && h->nodes[j].priority < h->nodes[k].priority) {
-            k = j;
-        }
-        if (j + 1 <= h->len && h->nodes[j + 1].priority < h->nodes[k].priority) {
-            k = j + 1;
-        }
-        if (k == i) {
-            break;
-        }
-        h->nodes[i] = h->nodes[k];
-        i = k;
-    }
-    h->nodes[i] = h->nodes[h->len + 1];
-}
+    int a = 1;
+    int e = 5;
+    int b = 2;
+    int c = 3;
+    int d = 4;
 
+    int* temp = NULL;
 
-//restituisce TRUE se la lista è vuota
-int pr_empty(pr_heap* h){
-    if (h == NULL)
-        return 0;
-    else 
-        return h->len == 0;
-}
+    pr_insert(Open,(void*)&a);
+    pr_insert(Open,(void*)&c);
+    pr_insert(Open,(void*)&b);
+    pr_insert(Open,(void*)&e);
+    pr_insert(Open,(void*)&d);
 
-int pr_ispresent(pr_heap* h, void* data, PREqualsFunction equals){
-    int find = 0;
-    if (h != NULL && data != NULL){
-        for(int i = 1; i <h->len && !find; i++){
-            if (equals(data,h->nodes[i].data))
-                find = 1;
-        }
-    }
-    return find;
-}
+    x = pr_isPresent(Open, (void*)&a, &ciao);
+    *x = 19;
 
-void pr_clean_list(pr_heap* h){
-    if (h != NULL){
-        for(int i = h->len-1; i <= 0; i--)
-            free((void*)&(h->nodes[i]));
-        free((void*)h);
+    temp = (int*)pr_pop_min(Open, &ciao);
+    while (temp != NULL){
+        printf("Estratto: %d\n", *temp);
+        temp = (int*)pr_pop_min(Open, &ciao);
     }
 
-}
+    return 0;
+}*/
 
-pr_heap* new_pr_list(){
-    pr_heap* new_pr_list = (pr_heap*)calloc(1,sizeof(pr_heap));
-    new_pr_list->nodes = NULL;
-    new_pr_list->len = 0; 
-    new_pr_list->size = 0;
-    return new_pr_list;
-}
 

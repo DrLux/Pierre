@@ -5,7 +5,7 @@
 // relazioen http://www.marcomeoni.net/univ/ia/relazioneOTTO.pdf
 
 
-int main(){
+int maina(){
 
 	srand(time(NULL));   // should only be called once
 	//struct State* puzzle = new_eight_puzzle_initial_state();
@@ -269,9 +269,6 @@ Boolean isSolvable(State* state){
         for (int r = 1; r < ROW; r++)
              if (extract_state(state)->matrix[c][r-1] > extract_state(state)->matrix[c][r])
                   count++;
-
-    printf("Risoluzione: %d\n", count%2);
-    eight_puzzle_print_state(state);
     return (count % 2);
 }
 
