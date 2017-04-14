@@ -161,6 +161,7 @@ State* lake_move_man_cabbage(State* old_state){
     }
     new->state[0] = !new->state[0];
 	new->state[1] = !new->state[1];
+	
 	new_generic_state->state = (void*)new;
 	return new_generic_state;
 }

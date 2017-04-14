@@ -1,11 +1,14 @@
 #include <pierre.h>
 
 int main(){
-    //struct Problem* problem = new_eight_puzzle();
-    struct Problem* problem = new_lake();
-    secret_hash(problem);
+    //struct Problem* problem = new_lake();
+    struct Problem* problem = new_eight_puzzle();
     //resolve_breadth_search(problem);
-    //resolve_astar(problem);
+    //resolve_iterative_deepening_search(problem);
+    //resolve_deep_limited_search(problem);
+    //resolve_uniform_cost_search(problem);
+    resolve_astar(problem);
+    //secret_hash(problem);
 
     return 0;
 }
@@ -15,10 +18,10 @@ void print_solution (struct IA_Node* node, struct Problem* problem){
         int num_state = 0;
         printf("Stati generati: %ld\n", get_num_states()); 
         printf("Nodi generati: %ld\n", get_num_nodes()); //sono molti di più di quelli esplorati perche non esploro nodi con gli stessi stati
-        printf("\n\t ** Soluzione ** \n");
+       printf("\n\t ** Soluzione ** \n");
         List* solution = new_list();
         
-        /*while(node != NULL){
+        while(node != NULL){
             push(solution,(void*)node);
             node = node->parent;
         }
@@ -27,7 +30,7 @@ void print_solution (struct IA_Node* node, struct Problem* problem){
             printf("\n\t ** State N. %d ** \n", num_state++);
             node = (struct IA_Node*)pop_lifo(solution);
             problem->print_state(node->node_state);
-        }*/
+        }
 
 	} else
 		puts("La soluzione non è stata trovata");
@@ -47,15 +50,17 @@ void resolve_breadth_search(struct Problem* problem){
     state_reset_count();    
 }
 
-void resolve_depth_limited_search(struct Problem* problem){
-    struct IA_Node* node_solution = depth_limited_search(problem,problem->depth_solution); 
-    if (FAILURE(node_solution))
+void resolve_deep_limited_search(struct Problem* problem){
+    struct IA_Node* node_solution = deep_limited_search(problem,problem->depth_solution); 
+    if (FAILURE(node_solution)){
         puts("La ricerca in Profondità Limitata non ha prodotto risultati.");
-    if (CUTOFF(node_solution))
-        printf("La soluzione non è stata trovata entro un limite di %ld nodi.\n", problem->depth_solution);
-    else{
-        puts("Problema risolto con Ricerca in Profondità Limitata");
-        print_solution(node_solution,problem);
+    } else {
+        if (CUTOFF(node_solution))
+            printf("La soluzione non è stata trovata entro un limite di %ld nodi.\n", problem->depth_solution);
+        else{
+            puts("Problema risolto con Ricerca in Profondità Limitata");
+            print_solution(node_solution,problem);
+        }
     }
     node_reset_count();
     state_reset_count();

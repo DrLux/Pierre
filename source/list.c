@@ -93,7 +93,7 @@ int is_present(List* list, void* ptr, EqualsFunction equals){
 	if (list != NULL){
 		List_Node* iterator = list->sentinel->next;
 		while (iterator != NULL && ret == 0){
-			ret = !(equals(ptr, iterator->cargo) == 0);
+			ret = (equals(ptr, iterator->cargo) == 0);
 			iterator = iterator->next;
 		}
 	}

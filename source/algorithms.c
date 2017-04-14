@@ -1,20 +1,17 @@
 #include <algorithms.h>
 
-//fare una struct che contiene le informazioni di debug quali:
-//nodi in frontiera, stati creati, nodi creati, nodi esplorati
-
 //funzione di hashing
 //con le HASH si parla di ID_STATO. Con le liste di id_nodo
 int hashing(void* valKey, int arraySize){
-  long int* intKey = (long int*) valKey;
-  return *intKey % arraySize;
+  //long int* intKey = (long int*) valKey;
+  ///return *intKey % arraySize;
+  return 1;
 }
 
 //se il return è NULL allora ha fallito
 struct IA_Node* breadth_search(struct Problem* problem){
 	struct IA_Node* node = new_ia_node();
 	node->node_state = problem->initial_state;
-	node->path_cost = 0;
 	if (problem->goal_test(node->node_state))
 		return node;
 	List* frontier = new_list();
@@ -28,7 +25,7 @@ struct IA_Node* breadth_search(struct Problem* problem){
 		actions = problem->transition_functions(node->node_state);	
 		while(!empty(actions)){
 			child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));			
-			//if (!is_present(frontier, (void*)child, compare_node_state)){
+			if (!is_present(frontier, (void*)child, compare_node_state)){
 				if (hash_table_search(esplored, (void*)child->node_state, hashing, problem->state_compare) == NULL){	
 					if (problem->goal_test(child->node_state)){
 						clean_list(frontier);
@@ -36,8 +33,8 @@ struct IA_Node* breadth_search(struct Problem* problem){
 						return child;
 					}
 					push(frontier,child);
-				} 
-			//} 
+				}
+			} 
 		}
 
 	}
@@ -45,11 +42,49 @@ struct IA_Node* breadth_search(struct Problem* problem){
 }
 
 
-struct IA_Node* depth_limited_search(struct Problem* problem, int limit){
-	struct IA_Node* root = new_ia_node();
-	root->node_state = problem->initial_state;
-	return dls_recursive(root,problem,limit);
+struct IA_Node* deep_limited_search(struct Problem* problem, int lim){
+	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	//registro tutti i nodi che visito, per evitare ripetizioni
+	List* frontier = new_list();
+	List* actions = NULL; //lista di azioni che da uno stato, generano gli stati successori
+	struct IA_Node* node = new_ia_node(); //nodo attuale
+	struct IA_Node* child = NULL; //nodo successore
+	int limit = lim;
+	node->node_state = problem->initial_state;
+
+	if (problem->goal_test(node->node_state)) 
+		return node;
+	push(frontier,(void*)node);
+	
+	while (!empty(frontier)){ //finche non ho più nodi in frontiera da esplorare
+		node = (IA_Node*)pop_lifo(frontier);
+		limit--; //scendo di un livello di profondita
+		hash_table_insert(esplored, (void*)node->node_state, sizeof(IA_Node), (void*)node->node_state, &hashing, problem->state_compare);	
+		actions = problem->transition_functions(node->node_state); //genero le possibili azioni	
+		while(!empty(actions)){ //per ogni azione possibile a partire da quello stato
+			child = node->child_ia_node(problem,node, (Action*)pop_lifo(actions)); //genero un nodo successore
+			if (!is_present(frontier, (void*)child, compare_node_state)){//verifico che non ci siano nodi fratelli/genitori uguali
+				if (hash_table_search(esplored, (void*)child->node_state, hashing, problem->state_compare) == NULL){ //verifico anche che il nuovo stato non sia uguale ad uno visitato in precedenza
+					if (problem->goal_test(child->node_state)){ //se ho trovato il risultato pulisco le risore e resituisco il nodo
+						clean_list(frontier);
+						hash_table_destroy(esplored);
+						return child;
+					}
+					if (limit >= 0){ //se posso scendere di un ulteriore livello 
+						push(frontier,child); //aggiungo il nuovo nodo in frontiera
+						limit--; //devo incrementare due volte perche rimuovendo il nodo generatore rialzo il limite
+					}
+				}
+			} 
+		}
+		limit++; //per ogni cammino che si conclude, rialzo il limite
+	}
+	if (limit <= 0)
+		return (struct IA_Node*)1; //se la ricerca è stata interrotta dal limite restituisco questa informazione
+	return NULL; //altrimenti riporto il fallimento
 }
+
+
+
 
 struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit){
 	if (problem->goal_test(node->node_state))
@@ -67,7 +102,7 @@ struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, in
 				ret = dls_recursive(child,problem,limit-1);
 				if (CUTOFF(ret)){
 					clean_ia_node(child);
-					cutoff_occured = true; //è necessario?
+					cutoff_occured = true; 
 				}
 				else 
 					if (!FAILURE(ret)) 
@@ -84,45 +119,52 @@ struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, in
 
 struct IA_Node* iterative_deepening_search(struct Problem* problem){
 	long long unsigned int i = 0; //per raggiungere il livello di profondità maggiore possibile
-	struct IA_Node* result = depth_limited_search(problem,i);
-	
+	struct IA_Node* result = deep_limited_search(problem,i);
+
 	for (; CUTOFF(result); i++){ //se la ricerca si interrompe per limiti di profondità, ne lanciamo una con profondità maggiore
-		result = depth_limited_search(problem,i);
+		result = deep_limited_search(problem,i);
 	}
-	problem->depth_solution = i-1;
+
+	problem->depth_solution = i-1; //aggiorno il valore di profondità alla struct problema
 	return result;
 }
 
-struct IA_Node* uniform_cost_search(struct Problem* problem){return NULL;}
-/*
-//non ben testata
-	struct IA_Node* node = new_ia_node();
+struct IA_Node* uniform_cost_search(struct Problem* problem){
 	List* actions = NULL;
-	struct IA_Node* child_node = NULL;
-	node->node_state = problem->initial_state;
-	pr_heap* frontier = new_pr_list();
-	pr_insert(frontier,node->path_cost,(void*)node);
+	Pr_List* frontier = new_pr_list();
 	HashTable_p esplored = hash_table_create(HASHMAP_INITIAL_SIZE);	
+	struct IA_Node* node = new_ia_node();
+	struct IA_Node* child_node = NULL;
+	struct IA_Node* search_node = NULL;
+	node->node_state = problem->initial_state;
 	
+	pr_insert(frontier,(void*)node);
 	while (!pr_empty(frontier)){ 
-		node = (struct IA_Node*)pr_pop(frontier); //chooses the lowest-cost node in frontier 
+		node = (struct IA_Node*)pr_pop_min(frontier,compare_node_cost); //estraggo il nood con il costo minore
 		if (problem->goal_test(node->node_state)){
-			pr_clean_list(frontier);
+			pr_destroy(frontier);
 			hash_table_destroy(esplored);
 			return node;
 		}
-		hash_table_insert(esplored, (void*)&(node->node_state->id), sizeof(IA_Node), (void*)&(node->node_state), &hashing, problem->state_compare);
+		hash_table_insert(esplored, (void*)node->node_state, sizeof(IA_Node), (void*)node->node_state, &hashing, problem->state_compare);
 		actions = problem->transition_functions(node->node_state); 
 		while(!empty(actions)){
 			child_node = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));	
-  			if (hash_table_search(esplored, (void*)&child_node->node_state->id, hashing, problem->state_compare) == NULL || pr_ispresent(frontier,(void*)child_node, compare_node_id) == NULL )
-				pr_insert(frontier,child_node->path_cost,(void*)child_node);
+  			if (hash_table_search(esplored, (void*)child_node->node_state, hashing, problem->state_compare) == NULL){//se è un nodo già esplorato non faccio nulla e vado direttamente a generare i prossimi
+				search_node = pr_isPresent(frontier,(void*)child_node, compare_node_cost); //cerco anche nella frontiera
+				if (search_node == NULL){ //se non è neanche in frontiera, lo aggiungo
+					pr_insert(frontier,(void*)child_node);
+				} else{ 
+					if (child_node->total_cost < search_node->total_cost){ //se il nuovo nodo è migliore del nodo in frontiera, li sostituisco
+						search_node->parent = child_node->parent;
+						search_node->total_cost = child_node->total_cost;
+					}
+				}
+  			}
 		}
 	}
 	return NULL;
 }
-*/
-
 
 struct IA_Node* AStar(struct Problem* problem){
 	HashTable_p Closed = hash_table_create(HASHMAP_INITIAL_SIZE);
@@ -145,6 +187,7 @@ struct IA_Node* AStar(struct Problem* problem){
 			List* actions = problem->transition_functions(node->node_state);
 			while(!empty(actions)){ //genera tutti i nodi figli
 				child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));//genero un nuovo stato
+				problem->print_state(child->node_state);
 				search_node = pr_isPresent(Open,(void*)child, compare_node_state); //verifica che lo stato del nodo generato non sia già nella lista dei nodi da esplorare
 				if (search_node != NULL && child->total_cost < search_node->total_cost){ //se hai trovato un modo più efficiente di raggiungere uno stato già presente nella lista dei nodi da esplorare
 					search_node->total_cost = child->total_cost; //aggiorna i costi del nodo in lista
@@ -171,33 +214,41 @@ if (found){
 
 
 
-struct IA_Node* secret_hash(struct Problem* problem){
+/*struct IA_Node* secret_hash(struct Problem* problem){
 	HashTable_p hash = hash_table_create(HASHMAP_INITIAL_SIZE);
 	struct IA_Node* node = new_ia_node();
-	struct IA_Node* child = NULL;
-	struct IA_Node* search_node = NULL;
-
+	List* frontier = new_list();
 	node->node_state = problem->initial_state;
-	List* actions = problem->transition_functions(node->node_state);
 
-	problem->print_state(node->node_state);
-	hash_table_insert(hash, (void*)node->node_state, sizeof(IA_Node), (void*)node->node_state, &hashing, problem->state_compare);	
-
-
-	while(!empty(actions)){
-		child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));
-		hash_table_insert(hash, (void*)child->node_state, sizeof(IA_Node), (void*)child->node_state, &hashing, problem->state_compare);	
-	}
 	
-	printf("La hash ha %d elementi\n", (int)hash->recordInserted);
-		
-	search_node = hash_table_search(hash, (void*)child->node_state, hashing, problem->state_compare);
-	if (search_node == NULL)
-		puts("non trovato");
-	else
-		problem->print_state(child->node_state);
+	node->node_state = lake_move_man(node->node_state);
+	printf("Lo stato vale: %d\n", hashing((void*)extract_lake_state(node->node_state),256));
+	problem->print_state(node->node_state);	
+	
+	/*node->node_state = lake_move_man(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
+	
+	node->node_state = lake_move_man_sheep(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
 
+	node->node_state = lake_move_man_sheep(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
+
+	node->node_state = lake_move_man_wolf(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
+
+	node->node_state = lake_move_man(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
+	
+	node->node_state = lake_move_man_sheep(node->node_state);
+	printf("Lo stato vale: %d\n", *((int*)extract_lake_state(node->node_state)));
+	problem->print_state(node->node_state);	
 
 
 	return NULL;
-}
+}*/

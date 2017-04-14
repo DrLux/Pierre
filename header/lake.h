@@ -4,7 +4,7 @@
 	#include <common.h>
 #endif
 
-#define LAKE_DLS_LIMIT  7
+#define LAKE_DLS_LIMIT  8
 #define NUM_VARIABLE_LAKE  4
 
 typedef State* (*Lake_Action)(State*);

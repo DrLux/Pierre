@@ -52,8 +52,9 @@ HashNode_p hash_list_search(HashList_p list, void* key, CompFunction compare) {
   HashNode_p item = list->first;
 
   while (item) {
-    if (compare(item->key, key) == 0)
+    if (compare(item->key, key) == 0){
       return item;
+    }
     item = item->next;
   }
 
