@@ -17,8 +17,8 @@ typedef struct IA_Node {
 	struct IA_Node* (*child_ia_node)(struct Problem* problem, struct IA_Node* actual, struct Action* move);
 } IA_Node;
 
-struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, struct Action* move);
-//i 2 nodi sono a void perche devono avere a che fare con le liste
+struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* parent, struct Action* move);
+
 
 IA_Node* new_ia_node();
 void node_reset_count();

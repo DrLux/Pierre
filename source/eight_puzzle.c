@@ -46,7 +46,6 @@ State* new_eight_puzzle_initial_state(){
 	gen_matrix(ep_root_state);
 	//manual_gen_matrix(ep_root_state);
 	new_generic_state->state = (void*)ep_root_state;
-	eight_puzzle_print_state(new_generic_state);
 	return new_generic_state;
 }
 
@@ -149,6 +148,8 @@ void eight_puzzle_print_state(State* generic_state){
 			puts("\n----+---+----");
 		}
 	puts("");
+	getchar( );
+	printf("\e[1;1H\e[2J");
 	}
 }
 
@@ -179,18 +180,20 @@ void gen_matrix(struct Eight_puzzle_state* state){
 
 //torna 1 quando è true
 Boolean isSolvable(struct Eight_puzzle_state* state){
-	int count = 1;
-    for (int c = 0; c < COLUMN; c++)
-        for (int r = 1; r < ROW; r++)
-             if (state->matrix[c][r-1] > state->matrix[c][r])
-                  count++;
-    return (count % 2);
+	int* arr = (int*)state->matrix;
+    int inv_count = 0;
+	for (int i = 0; i < 9 - 1; i++)
+		for (int j = i+1; j < 9; j++)
+			if (arr[j] && arr[i] && arr[i] > arr[j]) //il blank vale 0
+				inv_count++;
+
+    return (inv_count % 2 == 0);
 }
 
 void manual_gen_matrix(struct Eight_puzzle_state* state){
-	int mtx[COLUMN][ROW] = {{0, 1, 8},
-    		                {3, 6, 2},  // Value 0 is used for empty space
-            		        {4, 5, 7}};
+	int mtx[COLUMN][ROW] = {{6, 4, 7},
+    		                {8, 5, 0},  // Value 0 is used for empty space
+            		        {3, 2, 1}};
 
     for (int c = 0; c < COLUMN; c++){
     	for (int r = 0; r < ROW; r++){

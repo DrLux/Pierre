@@ -171,39 +171,42 @@ struct IA_Node* AStar(struct Problem* problem){
 	Pr_List* Open = new_pr_list();
 	struct IA_Node* node = new_ia_node();
 	struct IA_Node* child = NULL;
-	struct IA_Node* search_node = NULL;
+	struct IA_Node* search_open = NULL;
+	struct IA_Node* search_closed = NULL;
 	
 	node->node_state = problem->initial_state;
 	node->path_cost = node->heuristic_Cost;
 	Boolean found = false;
 
+	problem->print_state(node->node_state);
+
 	pr_insert(Open,(void*)node);
 	while( !pr_empty(Open) && !found ){
 		node = (struct IA_Node*)pr_pop_min(Open,&compare_node_cost);	
-		hash_table_insert(Closed, (void*)node->node_state, sizeof(IA_Node), (void*)node, &hashing, problem->state_compare);
+		hash_table_insert(Closed, (void*)node->node_state, sizeof(IA_Node), (void*)node, hashing, problem->state_compare);		
 		if (problem->goal_test(node->node_state)){
 			found = true;
 		} else {
 			List* actions = problem->transition_functions(node->node_state);
 			while(!empty(actions)){ //genera tutti i nodi figli
 				child = node->child_ia_node(problem,node, (Action*)pop_fifo(actions));//genero un nuovo stato
-				problem->print_state(child->node_state);
-				search_node = pr_isPresent(Open,(void*)child, compare_node_state); //verifica che lo stato del nodo generato non sia già nella lista dei nodi da esplorare
-				if (search_node != NULL && child->total_cost < search_node->total_cost){ //se hai trovato un modo più efficiente di raggiungere uno stato già presente nella lista dei nodi da esplorare
-					search_node->total_cost = child->total_cost; //aggiorna i costi del nodo in lista
-					search_node->parent = child->parent; //aggiorna il percorso per arrivare al nodo in lista
-				} else {
-					search_node = hash_table_search(Closed, (void*)node->node_state, hashing, problem->state_compare); //cerca lo stato generato tra gli stati gia visitati
-					if (search_node != NULL && child->total_cost < search_node->total_cost){ //se avevi registrato un percorso di arrivo obsoleto per questo stato		
-						hash_table_delete(Closed, (void*)search_node->node_state, hashing, problem->state_compare); //rimuovi dalla lista CLOSED
-					}
+				search_open = pr_isPresent(Open,(void*)child, compare_node_state); //verifica che lo stato del nodo generato non sia già nella lista dei nodi da esplorare
+				if (search_open != NULL && child->total_cost < search_open->total_cost){ //se hai trovato un modo più efficiente di raggiungere uno stato già presente nella lista dei nodi da esplorare
+					search_open->total_cost = child->total_cost; //aggiorna i costi del nodo in lista
+					search_open->parent = child->parent; //aggiorna il percorso per arrivare al nodo in lista
+				} 
+				search_closed = hash_table_search(Closed, (void*)child->node_state, hashing, problem->state_compare); //cerca lo stato generato tra gli stati gia visitati
+				if (search_closed != NULL && child->total_cost < search_closed->total_cost){ //se avevi registrato un percorso di arrivo obsoleto per questo stato		
+					hash_table_delete(Closed, (void*)search_closed->node_state, hashing, problem->state_compare); //rimuovi dalla lista CLOSED
 					pr_insert(Open,(void*)child); //aggiungi il nodo trovato in Open con il percorso aggiornato.
 				}
-
+				if (search_open == NULL && search_closed == NULL){
+					pr_insert(Open,(void*)child);
 				}
-
+				
 			}
 		}
+	}
 if (found){
 	hash_table_destroy(Closed);
 	pr_destroy(Open);

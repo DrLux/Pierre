@@ -16,13 +16,13 @@ IA_Node* new_ia_node() {
     return new_node;
 }
 
-struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* actual, struct Action* new_step){
+struct IA_Node* child_ia_node(struct Problem* problem, struct IA_Node* parent, struct Action* new_step){
     struct IA_Node* child = new_ia_node(); 
-	child->node_state = new_step->move(actual->node_state);
-	child->parent = actual;
+	child->node_state = new_step->move(parent->node_state);
+	child->parent = parent;
 	child->node_action = new_step;
-	child->path_cost = problem->step_cost(actual->node_state, actual->path_cost);
-	child->heuristic_Cost = problem->heuristic(actual->node_state);
+	child->path_cost = problem->step_cost(child->node_state, parent->path_cost);
+	child->heuristic_Cost = problem->heuristic(child->node_state);
     child->total_cost = child->heuristic_Cost + child->path_cost;
 	return child;
 }

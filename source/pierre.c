@@ -4,9 +4,9 @@ int main(){
     //struct Problem* problem = new_lake();
     struct Problem* problem = new_eight_puzzle();
     //resolve_breadth_search(problem);
-    //resolve_iterative_deepening_search(problem);
     //resolve_deep_limited_search(problem);
     //resolve_uniform_cost_search(problem);
+    //resolve_iterative_deepening_search(problem);
     resolve_astar(problem);
     //secret_hash(problem);
 
