@@ -191,6 +191,7 @@ Boolean isSolvable(struct Eight_puzzle_state* state){
 }
 
 void manual_gen_matrix(struct Eight_puzzle_state* state){
+	//la configurazione più difficile, ci servono 31 mosse
 	int mtx[COLUMN][ROW] = {{6, 4, 7},
     		                {8, 5, 0},  // Value 0 is used for empty space
             		        {3, 2, 1}};

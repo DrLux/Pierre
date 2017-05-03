@@ -1,0 +1,69 @@
+HASH_TABLE
+
+Problema risolto con Ricerca in Profondità Limitata
+Stati generati: 35
+Nodi generati: 15
+
+        
+Problema risolto con la Riceca a Costo Uniforme
+Stati generati: 35
+Nodi generati: 16
+
+        
+Problema risolto con Ricerca in Profondità Iterativa
+Il risultato è stato trovato ad una profondita paria a: 8
+Stati generati: 220
+Nodi generati: 97
+
+         
+
+Problema risolto con Ricerca in Ampiezza
+Stati generati: 45
+Nodi generati: 20
+
+
+
+         
+CON ALBERI ROSSO NERI
+
+Problema risolto con Ricerca in Profondità Limitata
+Stati generati: 35
+Nodi generati: 15
+
+
+Problema risolto con la Riceca a Costo Uniforme
+Stati generati: 35
+Nodi generati: 16
+
+
+Problema risolto con Ricerca in Profondità Iterativa
+Il risultato è stato trovato ad una profondita paria a: 8
+Stati generati: 220
+Nodi generati: 97
+
+
+
+Problema risolto con Ricerca in Ampiezza
+Stati generati: 60
+Nodi generati: 27
+
+
+
+
+
+ASTAR:
+Configurazione piu difficile del' 8-puzzle -> 31 mosse
+
+6 4 7
+8 5 .
+3 2 1
+
+ALberi rosso neri:
+Stati generati: 57248
+Nodi generati: 57248
+
+
+HASHTABLE
+Stati generati: 43311
+Nodi generati: 43311
+

@@ -13,11 +13,8 @@
 
 
 struct IA_Node* breadth_search(struct Problem* problem);
-void manage_goal(List* frontier, HashTable_p esplored);
-
 struct IA_Node* deep_limited_search(struct Problem* problem, int lim);
 struct IA_Node* dls_recursive (struct IA_Node* node, struct Problem* problem, int limit);
 struct IA_Node* iterative_deepening_search(struct Problem* problem);
 struct IA_Node* uniform_cost_search(struct Problem* problem);
 struct IA_Node* AStar(struct Problem* problem);
-struct IA_Node* secret_hash(struct Problem* problem);
