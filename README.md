@@ -21,4 +21,4 @@ I sorgenti che fanno parte propriamente di Pierre sono:
 
 I moduli codificati per esempio sono "lake" ed "8-puzzle"
 
-![alt text](https://ibb.co/jFA56Q)
+![alt text](http://i.imgur.com/ADZkwP1.jpg)
