@@ -13,12 +13,17 @@ I sorgenti si trovano nella cartella "source" mentre i relativi header nella car
 
 Molti sorgenti sono relativi alle strutture dati utilizzate: (list, priority_list,redblack, rbt_helper)
 
-I sorgenti che fanno parte propriamente di Pierre sono
-	pierre = contiene il main. Comunica con l' utente e inizilizza, risolve, stampa il problema
-	bt_algorithms = contiene l'implementazione degli algoritmi
-	node = contiene i costruttori dei nodi usati dagli alberi di ricerca
-	problem = contiene i costruttori dei problemi gia codificati in pierre
-	common =  elementi comuni a tutti i problemi. Praticamente giusto il costruttore dei generici stati
+I sorgenti che fanno parte propriamente di Pierre sono: 
+
+pierre = contiene il main. Comunica con l' utente e inizilizza, risolve, stampa il problema
+
+bt_algorithms = contiene l'implementazione degli algoritmi
+
+node = contiene i costruttori dei nodi usati dagli alberi di ricerca
+
+problem = contiene i costruttori dei problemi gia codificati in pierre
+
+common =  elementi comuni a tutti i problemi. Praticamente giusto il costruttore dei generici stati
 
 I moduli codificati per esempio sono "lake" ed "8-puzzle"
 
