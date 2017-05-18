@@ -20,3 +20,5 @@ I sorgenti che fanno parte propriamente di Pierre sono:
 	common: elementi comuni a tutti i problemi. Praticamente giusto il costruttore dei generici stati
 
 I moduli codificati per esempio sono "lake" ed "8-puzzle"
+
+![alt text](https://ibb.co/jFA56Q)
