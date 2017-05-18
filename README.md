@@ -29,7 +29,7 @@ I moduli codificati per esempio sono "lake" ed "8-puzzle"
 
 					 pierre.h 
 					     |
-					algorithms.h 
+					bt_algorithms.h 
 			              /      |        \                   
 		          priority_list.h  node.h    redblack_tree.h
 					     |
