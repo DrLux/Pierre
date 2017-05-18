@@ -1,4 +1,7 @@
 #include <node.h>
+//Contiene il costruttore del nodo da usare per gli aberi di ricera
+//con relativi gestori di id per tenerne il conto.
+//Inoltre sono presenti per la comparazione tra nodi.
 
 long int id_nodes = 0;
 

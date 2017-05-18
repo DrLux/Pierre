@@ -7,23 +7,20 @@
 #ifndef __EIGHT_PUZZLE__
 	#include <eight_puzzle.h>
 #endif
+//variabile globale che permette di confrontare due NODE secondo i loro stati.La inizializzo nelle new
+int (*state_compare)(void* state1, void* state2); 
 
-int (*state_compare)(void* state1, void* state2); //variabile globale che permette di confrontare due NODE secondo i loro stati.La inizializzo nelle new
-
-// 0 = Uomo, 1 = Cavolo, 2 = Pecola, 3 = Lupo
 typedef struct Problem {
-	State* initial_state; //è un attributo
+	State* initial_state; 
 	long int depth_solution;
 	List* (*transition_functions)(State* state);
 	Boolean (*goal_test)(State* state);
-	Boolean (*constraint_test)(State* state);
 	void (*print_state)(State* state);
 	int (*heuristic)(State* state);
 	int (*step_cost)(State* state, int cost);
 	int (*state_compare)(void* state1, void* state2);
 } Problem;
 
-//genera la struct che contiene tutte le informazioni del problema
 Problem* new_lake();
 
 Problem* new_eight_puzzle();

@@ -1,37 +1,5 @@
 #include <eight_puzzle.h>
 
-//Ammisibilità: http://www.geeksforgeeks.org/check-instance-8-puzzle-solvable/
-// Princeton: https://www.cs.princeton.edu/courses/archive/spr10/cos226/assignments/8puzzle.html
-// relazioen http://www.marcomeoni.net/univ/ia/relazioneOTTO.pdf
-
-/*
-int main(){
-
-	srand(time(NULL));   // should only be called once
-	for (int x = 0; x < 40; x++){
-		printf("%d\n", x);
-		new_eight_puzzle_initial_state();
-	}
-
-	struct State* puzzle = new_eight_puzzle_initial_state();
-	struct Action* moves = NULL;
-	int i = 0;
-	List* list = eight_puzzle_transition_functions(puzzle);
-	puts("Stato iniziale");
-	eight_puzzle_print_state(puzzle);
-
-
-	while(!empty(list)){
-		printf("Stato %d\n",i );
-		moves = (Action*)pop_fifo(list);
-		eight_puzzle_print_state(moves->move(puzzle));
-	}
-
-	return 0;
-}
-*/
-
-
 State* new_eight_puzzle_state(){
 	struct State* new_generic_state = new_state();
 	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
@@ -44,7 +12,7 @@ State* new_eight_puzzle_initial_state(){
 	struct State* new_generic_state = new_state();
 	struct Eight_puzzle_state* ep_root_state = (Eight_puzzle_state*)calloc(1,sizeof(Eight_puzzle_state));
 	gen_matrix(ep_root_state);
-	//manual_gen_matrix(ep_root_state);
+	//manual_gen_matrix(ep_root_state); //stato iniziale non randomico, ma codato
 	new_generic_state->state = (void*)ep_root_state;
 	return new_generic_state;
 }
@@ -56,7 +24,7 @@ Action* new_eight_puzzle_move(Eight_puzzle_Action moves) {
     return actions;
 }
 
-
+//genera una lista di mosse possibili a partire da uno stato
 List* eight_puzzle_transition_functions(State* generic_state){
 	List* list = NULL;
 	if (generic_state != NULL && generic_state->state != NULL){
@@ -207,12 +175,13 @@ void manual_gen_matrix(struct Eight_puzzle_state* state){
     }
 }
 
-
+//fa un semplice deferenziamento. Rende il codice più pulito
 struct Eight_puzzle_state* extract_state (State* generic_state){
 	struct Eight_puzzle_state* struct_state = (struct Eight_puzzle_state*)generic_state->state;
 	return struct_state;
 }
 
+//copia una matrice 
 void matriscopy (void* destmat, void* srcmat) {
   memcpy(destmat,srcmat, ROW*COLUMN*sizeof(int));
 }

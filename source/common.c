@@ -1,5 +1,5 @@
 #include "common.h"
-
+//Contiene il costruttore dello "stato" e la corrispettiva gestione degli id per contare gli stati generati.
 long int id_states = 0;
 
 State* new_state(){

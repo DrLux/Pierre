@@ -1,5 +1,5 @@
 #include <problem.h>
-
+//contiene i costruttori dei problemi disponibili per Pierre
 
 
 Problem* new_lake() {
@@ -7,7 +7,6 @@ Problem* new_lake() {
     lake->initial_state = new_lake_initial_state();
     lake->transition_functions = &lake_transition_functions; 
     lake->goal_test = &lake_goal_test;
-    lake->constraint_test = &lake_constraint_test;//si puo togliere
     lake->print_state = &lake_print_state;
     lake->heuristic = &lake_heuristic;
     lake->step_cost = &lake_step_cost;

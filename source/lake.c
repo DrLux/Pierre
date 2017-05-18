@@ -15,7 +15,6 @@ State* new_lake_state(){
 	return new_generic_state;
 }
 
-//dovrei fare una super ma non voglio inizializzare a 0 e poi rinizializzare a false
 State* new_lake_initial_state(){
 	struct State* new_generic_state = new_state();
 	struct Lake_state* lake_root_state = (Lake_state*)calloc(1,sizeof(Lake_state));
@@ -31,6 +30,7 @@ Action* new_lake_move(Lake_Action moves) {
     return actions;
 }
 
+//genera la lista di mosse ammissibili da un determinato stato
 List* lake_transition_functions(State* generic_state){
 	List* list = NULL;
 	if (generic_state != NULL && generic_state->state != NULL){
@@ -93,7 +93,7 @@ Boolean lake_goal_test(State* struct_state){
 }
 
 int lake_heuristic(State* struct_state){
-	return 1; //per ora non viene usata
+	return 1; //nessuna coonoscenza sul problema
 }
 
 int lake_step_cost(State* struct_state, int cost){
@@ -138,7 +138,6 @@ void lake_print_state(State* struct_state){
 	}
 }
 
-//prende uno lake_state come parametro ma torna uno State normale
 State* lake_move_man(State* old_state){
 	struct State* new_generic_state = new_lake_state();
 	Lake_state* new = extract_lake_state(new_generic_state);
@@ -194,7 +193,7 @@ State* lake_move_man_wolf(State* old_state){
 	return new_generic_state;
 }
 
-//extact lake state from a generic state
+//estrae un lake_state da un generico stato 
 Lake_state* extract_lake_state (State* generic_state){
 	Lake_state* struct_state = (Lake_state*)generic_state->state;
 	return struct_state;
