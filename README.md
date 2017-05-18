@@ -1,4 +1,4 @@
-Pierre
+### Problem Resolver -> Pierre ###
 
 ### Per compilare ###
 Recarsi nella cartella principale (pierre) e digitare il comando make. 	
@@ -20,3 +20,6 @@ I sorgenti che fanno parte propriamente di Pierre sono:
 	common: elementi comuni a tutti i problemi. Praticamente giusto il costruttore dei generici stati
 
 I moduli codificati per esempio sono "lake" ed "8-puzzle"
+
+![alt text](http://i.imgur.com/ADZkwP1.jpg)
+
