@@ -7,7 +7,7 @@
 typedef int (*Comp)(void*, void*);
 
 typedef struct IA_Node {
-	long int id; //serve per la LISTA di nodi
+	long int id; 
 	struct State* node_state;
 	struct IA_Node* parent;
 	struct Action* node_action;

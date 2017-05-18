@@ -8,7 +8,7 @@ typedef int (*HashFunction)(void*, int);
 typedef enum {DECREASE, INCREASE} ht_resize;
 
 typedef struct _HashTable {
-    HashList_p* table; // array
+    HashList_p* table; 
     unsigned int size;
     unsigned int recordInserted;
 } HashTable_t, *HashTable_p;

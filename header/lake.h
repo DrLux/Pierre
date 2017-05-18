@@ -15,9 +15,7 @@ typedef struct Lake_state {
 
 
 State* new_lake_state();
-//serve per astrarre dallo stato. solo il problema sa come riempire questa struct
 State* new_lake_initial_state();
-//unico costruttore che modifica la mossa nella struct che genera, in base all' indice passato come parametro
 Action* new_lake_move(Lake_Action);
 
 State* lake_move_man(State* old_state);

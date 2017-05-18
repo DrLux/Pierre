@@ -79,7 +79,7 @@ struct IA_Node* bt_deep_limited_search(struct Problem* problem, int lim){
 
 
 
-
+//funziona ma non la uso. Versione iterativa più ottimizzata
 struct IA_Node* bt_dls_recursive (struct IA_Node* node, struct Problem* problem, int limit){
 	if (problem->goal_test(node->node_state))
 		return node;
