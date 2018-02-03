@@ -1,4 +1,4 @@
-### Pierre: Solving Problems By Intelligent Search ###
+# Pierre: Solving Problems By Intelligent Search #
 
 ### To compile ###
 Go in to the main folder of the project and digit the make command.
