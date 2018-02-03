@@ -1,45 +1,15 @@
-### Problem Resolver -> Pierre ###
-![alt text](http://i.imgur.com/ADZkwP1.jpg)
+### Pierre: Solving Problems By Intelligent Search ###
 
-### Per compilare ###
-Recarsi nella cartella principale (pierre) e digitare il comando make. 	
-	Esempio: Laboratorio/Pierre> make
+### To compile ###
+Go in to the main folder of the project and digit the make command.
 
-L' eseguibile si troverà nella cartella "bin", mentre tutti i file oggeto saranno spostati automaticamente nella cartella "build"
+For example:
+	My_projects/Pierre> make
 
+You will find the executable in "bin" folder.
 
-### Sorgenti ###
-I sorgenti si trovano nella cartella "source" mentre i relativi header nella cartella "header"
+### Documentation ###
+All the documentation are available  on the [dedicated page](https://drlux.github.io/pierre.html) .
 
-Molti sorgenti sono relativi alle strutture dati utilizzate: (list, priority_list,redblack, rbt_helper)
-
-I sorgenti che fanno parte propriamente di Pierre sono: 
-
-pierre = contiene il main. Comunica con l' utente e inizilizza, risolve, stampa il problema
-
-bt_algorithms = contiene l'implementazione degli algoritmi
-
-node = contiene i costruttori dei nodi usati dagli alberi di ricerca
-
-problem = contiene i costruttori dei problemi gia codificati in pierre
-
-common =  elementi comuni a tutti i problemi. Praticamente giusto il costruttore dei generici stati
-
-I moduli codificati per esempio sono "lake" ed "8-puzzle"
-
-					 pierre.h 
-					     |
-					bt_algorithms.h 
-			              /      |        \                   
-		          priority_list.h  node.h    redblack_tree.h
-					     |
-					  problem.h
-					     |
-				     *MODULO_PROBLEMA*
-					     |
-					  common.h
-					     |
-					   list.h 
-
-
-
+### Screenshot from execution ###
+![execution_of_Pierre](http://i.imgur.com/ADZkwP1.jpg)
